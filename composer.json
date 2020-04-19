@@ -6,6 +6,9 @@
     "type": "project",
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "config": {
+        "vendor-dir": "vendor"
+    },
     "authors": [
         {
             "name": "Guilherme Nascimento",

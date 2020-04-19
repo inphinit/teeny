@@ -1,5 +1,5 @@
 <?php
-require_once 'teeny.php';
+require_once 'vendor/teeny.php';
 
 $app = new Teeny;
 
@@ -21,4 +21,5 @@ $app->handlerCodes(array(404, 405), function ($code) {
     echo 'Custom page error ', $code;
 });
 
-$app->exec();
+//Remove true in argument if use Apache, Ngnix or IIS
+return $app->exec(true);

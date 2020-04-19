@@ -117,9 +117,10 @@ class Teeny
     /**
      * Execute application
      *
-     * @return void
+     * @param bool $builtin Check file in built-in web-server
+     * @return bool
      */
-    public function exec()
+    public function exec($builtin = false)
     {
         if ($this->done) {
             return null;
@@ -134,6 +135,10 @@ class Teeny
         if ($code === 200) {
             $method = $_SERVER['REQUEST_METHOD'];
             $path = $this->path();
+
+            if ($builtin && $this->builtinFile()) {
+                return false;
+            }
 
             if (isset($this->routes[$path])) {
                 $routes = &$this->routes[$path];
@@ -174,5 +179,20 @@ class Teeny
                 $callback();
             }
         }
+
+        return true;
+    }
+
+    private function builtinFile()
+    {
+        $path = $this->pathinfo;
+
+        return (
+            $path !== '/' &&
+            PHP_SAPI === 'cli-server' &&
+            strcasecmp($path, '/vendor') !== 0 &&
+            stripos($path, '/vendor/') !== 0 &&
+            is_file(__DIR__ . '/..' . $path)
+        );
     }
 }
