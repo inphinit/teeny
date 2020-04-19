@@ -7,8 +7,10 @@ $app->action('POST', '/foo/bar', function () {
     echo 'Hello foo bar!';
 });
 
-$app->action('PUT', '/cat', function () {
-    echo 'Olá foo bar!';
+$app->action('PUT', '/cat', function () use ($app) {
+    $app->status(201);
+
+    echo 'Resource created';
 });
 
 $app->action('GET', '/', function () {
