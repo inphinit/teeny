@@ -1,0 +1,4 @@
+* text=auto
+* text eol=lf
+*.bat eol=crlf
+web.config eol=crlf
