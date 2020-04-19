@@ -1,22 +1,23 @@
 <?php
-
-include_once 'teeny.php';
+require_once 'teeny.php';
 
 $app = new Teeny;
 
-$app->action('/foo/bar', 'POST', function () {
+$app->action('POST', '/foo/bar', function () {
     echo 'Hello foo bar!';
 });
 
-$app->action('/cat', 'PUT', function () {
+$app->action('PUT', '/cat', function () {
     echo 'Olá foo bar!';
 });
 
-$app->action('/', 'GET', function () {
+$app->action('GET', '/', function () {
     echo 'Hello world!';
 });
 
-$app->handlerCodes([404, 405], function ($code) {
+$app->action('GET', '/include', 'foo.php');
+
+$app->handlerCodes(array(404, 405), function ($code) {
     echo 'Custom page error ', $code;
 });
 

@@ -4,6 +4,12 @@
 
 IndexIgnore *
 
+# Redirect page errors to route system
+ErrorDocument 401 /tenny/index.php/RESERVED.TENNY-401.html
+ErrorDocument 403 /tenny/index.php/RESERVED.TENNY-403.html
+ErrorDocument 500 /tenny/index.php/RESERVED.TENNY-500.html
+ErrorDocument 501 /tenny/index.php/RESERVED.TENNY-501.html
+
 RewriteEngine On
 
 # Check file or folders exists
