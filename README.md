@@ -176,6 +176,9 @@ $app->action('GET', '/article/<name>-<id:num>', function ($params) {
 
 Type | Example | Description
 ---|---|---
-`num` | `$app->action('GET', '/foo/<id:num>', ...);` | Only accepts parameters with numeric format and `$params` returns `array( id => ...)`
+`alnum` | `$app->action('GET', '/baz/<video:alnum>', ...);` | Only accepts parameters with alpha-numeric format and `$params` returns `array( video => ...)`
 `alpha` | `$app->action('GET', '/foo/bar/<name:alpha>', ...);` | Only accepts parameters with alpha format and `$params` returns `array( name => ...)`
-`alnum` | `$app->action('GET', '/baz/<barcode:alnum>', ...);` | Only accepts parameters with alpha-numeric format and `$params` returns `array( barcode => ...)`
+`decimal` | `$app->action('GET', '/baz/<price:decimal>', ...);` | Only accepts parameters with decimal format and `$params` returns `array( price => ...)`
+`num` | `$app->action('GET', '/foo/<id:num>', ...);` | Only accepts parameters with integer format and `$params` returns `array( id => ...)`
+`uuid` | `$app->action('GET', '/bar/<barcode:alnum>', ...);` | Only accepts parameters with uuid format and `$params` returns `array( barcode => ...)`
+`version` | `$app->action('GET', '/baz/<api:version>', ...);` | Only accepts parameters with [semversion (v2)](https://semver.org/spec/v2.0.0.html) format and `$params` returns `array( api => ...)`
