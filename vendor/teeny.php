@@ -8,8 +8,6 @@ class Teeny
     private $pathinfo;
     private $code = 200;
 
-    private $done = false;
-
     private $hasParams = false;
 
     public function __construct()
@@ -25,12 +23,12 @@ class Teeny
     public function path()
     {
         if ($this->pathinfo === null) {
-            $requri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $requri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
             $sname = $_SERVER['SCRIPT_NAME'];
 
             if ($requri !== $sname && $sname !== '/index.php') {
                 $pathinfo = rtrim(strtr(dirname($sname), '\\', '/'), '/');
-                $pathinfo = substr(urldecode($requri), strlen($pathinfo));
+                $pathinfo = substr($requri, strlen($pathinfo));
 
                 if ($pathinfo === false) {
                     $this->pathinfo = '/';
@@ -38,7 +36,7 @@ class Teeny
                     $this->pathinfo = $pathinfo;
                 }
             } else {
-                $this->pathinfo = urldecode($requri);
+                $this->pathinfo = $requri;
             }
         }
 
@@ -129,12 +127,6 @@ class Teeny
      */
     public function exec($builtin = false)
     {
-        if ($this->done) {
-            return null;
-        }
-
-        $this->done = true;
-
         $callback = null;
         $newCode = 0;
         $code = $this->status();
@@ -175,7 +167,9 @@ class Teeny
             $callback = $this->codes[$newCode];
         }
 
-        $this->dispatch($callback, $newCode, null);
+        if ($callback) {
+            $this->dispatch($callback, $newCode, null);
+        }
 
         return true;
     }
@@ -187,12 +181,15 @@ class Teeny
 
         foreach ($this->routes as $path => $value) {
             if (isset($value[$method]) && strpos($path, '<') !== false) {
-                $path = preg_replace('#\\\\[<](.*?)(\\\\:(num|alnum|alpha|lower)|)\\\\[>]#i', '(?<$1><$3>)', preg_quote($path));
+                $path = preg_replace('#\\\\[<](.*?)(\\\\:(alnum|alpha|decimal|num|uuid|version)|)\\\\[>]#i', '(?<$1><$3>)', preg_quote($path));
 
                 $path = str_replace('<>)', '.*?)', $path);
-                $path = str_replace('<num>)', '\d+)', $path);
                 $path = str_replace('<alnum>)', '[a-z\d]+)', $path);
                 $path = str_replace('<alpha>)', '[a-z]+)', $path);
+                $path = str_replace('<decimal>)', '\d+\.\d+)', $path);
+                $path = str_replace('<num>)', '\d+)', $path);
+                $path = str_replace('<uuid>)', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', $path);
+                $path = str_replace('<version>)', '\d+\.\d+(\.\d+(-[\da-z]+(\.[\da-z]+)*(\+[\da-z]+(\.[\da-z]+)*)?)?)?)', $path);
 
                 if (preg_match('#^' . $path . '$#i', $current, $params)) {
                     foreach ($params as $key => $match) {

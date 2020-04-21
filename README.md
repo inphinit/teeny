@@ -156,16 +156,14 @@ $app->action('GET', '/article/<name>-<id>', function ($params) use ($app) {
 });
 ```
 
-If access a URL like this `http://mywebsite/user/mary` returns:
+If access a URL like this `http://mywebsite/article/mary-1000` returns:
 
 ```
-array(2) {
-  ["user"]=>
-  string(3) "mary"
-}
+Article ID: mary
+Article name: 1000
 ```
 
-## Types for named params in routes
+## Types of params named in routes
 
 An example, only numeric id are valids:
 
@@ -178,6 +176,6 @@ $app->action('GET', '/article/<name>-<id:num>', function ($params) {
 
 Type | Example | Description
 ---|---|---
-`num` | `$app->action('GET', '/foo/<id:num>', ...);` | Only accepts parameters with numeric format
-`alpha` | `$app->action('GET', '/foo/bar/<name:alpha>', ...);` | Only accepts parameters with alpha format
-`alnum` | `$app->action('GET', '/baz/<barcode:alnum>', ...);` | Only accepts parameters with alpha-numeric format
+`num` | `$app->action('GET', '/foo/<id:num>', ...);` | Only accepts parameters with numeric format and `$params` returns `array( id => ...)`
+`alpha` | `$app->action('GET', '/foo/bar/<name:alpha>', ...);` | Only accepts parameters with alpha format and `$params` returns `array( name => ...)`
+`alnum` | `$app->action('GET', '/baz/<barcode:alnum>', ...);` | Only accepts parameters with alpha-numeric format and `$params` returns `array( barcode => ...)`

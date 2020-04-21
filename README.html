@@ -1190,14 +1190,12 @@ Fatal error: require(): Failed opening required &#39;foo/bar/test.php&#39; (incl
 <span class="x">});</span>
 </pre></div>
 
-<p>If access a URL like this <code>http://mywebsite/user/mary</code> returns:</p>
-<div class="codehilite"><pre>array(2) {
-  [&quot;user&quot;]=&gt;
-  string(3) &quot;mary&quot;
-}
+<p>If access a URL like this <code>http://mywebsite/article/mary-1000</code> returns:</p>
+<div class="codehilite"><pre>Article ID: mary
+Article name: 1000
 </pre></div>
 
-<h2 id="types-for-named-params-in-routes">Types for named params in routes<a class="headerlink" href="#types-for-named-params-in-routes" title="Permanent link"></a></h2>
+<h2 id="types-of-params-named-in-routes">Types of params named in routes<a class="headerlink" href="#types-of-params-named-in-routes" title="Permanent link"></a></h2>
 <p>An example, only numeric id are valids:</p>
 <div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/article/&lt;name&gt;-&lt;id:num&gt;&#39;, function ($params) {</span>
 <span class="x">    echo &#39;Article ID: &#39;, $params[&#39;id&#39;], &#39;&lt;br&gt;&#39;;</span>
@@ -1217,17 +1215,17 @@ Fatal error: require(): Failed opening required &#39;foo/bar/test.php&#39; (incl
 <tr>
 <td><code>num</code></td>
 <td><code>$app-&gt;action('GET', '/foo/&lt;id:num&gt;', ...);</code></td>
-<td>Only accepts parameters with numeric format</td>
+<td>Only accepts parameters with numeric format and <code>$params</code> returns <code>array( id =&gt; ...)</code></td>
 </tr>
 <tr>
 <td><code>alpha</code></td>
 <td><code>$app-&gt;action('GET', '/foo/bar/&lt;name:alpha&gt;', ...);</code></td>
-<td>Only accepts parameters with alpha format</td>
+<td>Only accepts parameters with alpha format and <code>$params</code> returns <code>array( name =&gt; ...)</code></td>
 </tr>
 <tr>
 <td><code>alnum</code></td>
 <td><code>$app-&gt;action('GET', '/baz/&lt;barcode:alnum&gt;', ...);</code></td>
-<td>Only accepts parameters with alpha-numeric format</td>
+<td>Only accepts parameters with alpha-numeric format and <code>$params</code> returns <code>array( barcode =&gt; ...)</code></td>
 </tr>
 </tbody>
 </table></article></body></html>
