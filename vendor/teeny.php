@@ -175,7 +175,7 @@ class Teeny
             $callback = $this->codes[$newCode];
         }
 
-        $this->dispatch($callback, $newCode, $params);
+        $this->dispatch($callback, $newCode, null);
 
         return true;
     }
