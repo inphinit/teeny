@@ -1,6 +1,9 @@
 <?php
 require_once 'vendor/teeny.php';
 
+//Uncomment next line for composer projects
+# require_once 'vendor/autoload.php';
+
 $app = new Teeny;
 
 $app->action('GET', '/', 'examples/home.php');
@@ -33,10 +36,6 @@ $app->action('GET', '/foo/<foo>-<bar>', function ($params) {
     echo '<pre>';
     print_r($params);
     echo '</pre>';
-});
-
-$app->handlerCodes(array(404, 405), function ($code) {
-    echo 'Custom page error ', $code;
 });
 
 // Example: http://localhost:8000/article/foo-1000
@@ -72,6 +71,11 @@ function teste($params) {
     print_r($params);
     echo '</pre>';
 }
+
+//Handle the HTTP response when the code is different than 200
+$app->handlerCodes(array(404, 405), function ($code) {
+    echo 'Custom page error ', $code;
+});
 
 //Remove true in argument if use Apache, Ngnix or IIS
 return $app->exec(true);
