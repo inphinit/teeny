@@ -4,10 +4,13 @@ class Teeny
     private $routes = array();
     private $codes = array();
 
+    private $method;
     private $pathinfo;
     private $code = 200;
 
     private $done = false;
+
+    private $hasParams = false;
 
     public function __construct()
     {
@@ -96,6 +99,10 @@ class Teeny
                 $this->routes[$path] = array();
             }
 
+            if (strpos($path, '<') !==false && $callback) {
+                $this->hasParams = true;
+            }
+
             $this->routes[$path][strtoupper(trim($methods))] = $callback;
         }
     }
@@ -133,29 +140,26 @@ class Teeny
         $code = $this->status();
 
         if ($code === 200) {
-            $method = $_SERVER['REQUEST_METHOD'];
             $path = $this->path();
 
             if ($builtin && $this->builtinFile()) {
                 return false;
             }
+        
+            $this->method = $_SERVER['REQUEST_METHOD'];
 
             if (isset($this->routes[$path])) {
                 $routes = &$this->routes[$path];
 
-                if (isset($routes[$method])) {
-                    $callback = $routes[$method];
+                if (isset($routes[$this->method])) {
+                    $callback = $routes[$this->method];
                 } elseif (isset($routes['ANY'])) {
                     $callback = $routes['ANY'];
                 } else {
                     $newCode = 405;
                 }
-
-                if (is_string($callback) && strpos($callback, '.') !== false) {
-                    $callback = function () use ($callback) {
-                        require $callback;
-                    };
-                }
+            } elseif ($this->hasParams && $this->params()) {
+                return true;
             } else {
                 $newCode = 404;
             }
@@ -171,16 +175,53 @@ class Teeny
             $callback = $this->codes[$newCode];
         }
 
-        //Executa a action de uma rota ou do código 404 ou 405
-        if ($callback) {
-            if ($newCode) {
-                $callback($newCode);
-            } else {
-                $callback();
+        $this->dispatch($callback, $newCode, $params);
+
+        return true;
+    }
+
+    private function params()
+    {
+        $current = $this->pathinfo;
+        $method = $this->method;
+
+        foreach ($this->routes as $path => $value) {
+            if (isset($value[$method]) && strpos($path, '<') !== false) {
+                $path = preg_replace('#\\\\[<](.*?)(\\\\:(num|alnum|alpha|lower)|)\\\\[>]#i', '(?<$1><$3>)', preg_quote($path));
+
+                $path = str_replace('<>)', '.*?)', $path);
+                $path = str_replace('<num>)', '\d+)', $path);
+                $path = str_replace('<alnum>)', '[a-z\d]+)', $path);
+                $path = str_replace('<alpha>)', '[a-z]+)', $path);
+
+                if (preg_match('#^' . $path . '$#i', $current, $params)) {
+                    foreach ($params as $key => $match) {
+                        if (is_int($key)) {
+                            unset($params[$key]);
+                        }
+                    }
+
+                    $this->dispatch($value[$method], 0, $params);
+
+                    return true;
+                }
             }
         }
 
-        return true;
+        return false;
+    }
+
+    private function dispatch($callback, $code = 0, $params = null)
+    {
+        if (is_string($callback) && strpos($callback, '.') !== false) {
+            require $callback;
+        } elseif ($code) {
+            $callback($code);
+        } elseif ($params !== null) {
+            $callback($params);
+        } else {
+            $callback();
+        }
     }
 
     private function builtinFile()
