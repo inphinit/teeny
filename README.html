@@ -1069,7 +1069,7 @@ body .markdown-body
 <h2 id="execute">Execute<a class="headerlink" href="#execute" title="Permanent link"></a></h2>
 <p>Copy for Apache ou Nginx folder and configure Vhost in Apache or execute direct from folder</p>
 <h2 id="api">API<a class="headerlink" href="#api" title="Permanent link"></a></h2>
-<p>Methods from <code>Tenny</code> class</p>
+<p>Methods from <code>Teeny</code> class</p>
 <table>
 <thead>
 <tr>
@@ -1079,27 +1079,27 @@ body .markdown-body
 </thead>
 <tbody>
 <tr>
-<td><code>Tenny::path(): string</code></td>
+<td><code>Teeny::path(): string</code></td>
 <td>Get current path from URL (ignores subfolders if it is located in a subfolder on your webserver)</td>
 </tr>
 <tr>
-<td><code>Tenny::status([int $code]): int</code></td>
+<td><code>Teeny::status([int $code]): int</code></td>
 <td>Get or set HTTP status</td>
 </tr>
 <tr>
-<td><code>Tenny::action(mixed $methods, string $path, mixd $callback): void</code></td>
+<td><code>Teeny::action(mixed $methods, string $path, mixd $callback): void</code></td>
 <td>Add or remove or update a route, supports functions, closures and paths to PHP scripts</td>
 </tr>
 <tr>
-<td><code>Tenny::handlerCodes(array $codes, mixd $callback): int</code></td>
+<td><code>Teeny::handlerCodes(array $codes, mixd $callback): int</code></td>
 <td>Detect if SAPI or script change HTTP status</td>
 </tr>
 <tr>
-<td><code>Tenny::setPattern(string $pattern, mixed $regex): void</code></td>
+<td><code>Teeny::setPattern(string $pattern, mixed $regex): void</code></td>
 <td>Add or remove pattern for custom routes, like <code>/foo/&lt;variable1:pattern&gt;</code></td>
 </tr>
 <tr>
-<td><code>Tenny::exec([bool $builtin]): bool</code></td>
+<td><code>Teeny::exec([bool $builtin]): bool</code></td>
 <td>Execute defined route, use <code>$builtin</code> for built-in-server for detect if file exists</td>
 </tr>
 </tbody>

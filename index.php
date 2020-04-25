@@ -11,7 +11,7 @@ $app->action('GET', '/', 'examples/home.php');
 $app->action('GET', '/include', 'examples/foo.php');
 
 $app->action('GET', '/about', function () {
-    echo 'Tenny is very small and easy route system';
+    echo 'Teeny is very small and easy route system';
 });
 
 $app->action('POST', '/foo/bar', function () {

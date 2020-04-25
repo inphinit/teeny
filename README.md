@@ -22,16 +22,16 @@ Copy for Apache ou Nginx folder and configure Vhost in Apache or execute direct 
 
 ## API
 
-Methods from `Tenny` class
+Methods from `Teeny` class
 
 Method | Description
 ---|---
-`Tenny::path(): string` | Get current path from URL (ignores subfolders if it is located in a subfolder on your webserver)
-`Tenny::status([int $code]): int` | Get or set HTTP status
-`Tenny::action(mixed $methods, string $path, mixd $callback): void` | Add or remove or update a route, supports functions, closures and paths to PHP scripts
-`Tenny::handlerCodes(array $codes, mixd $callback): int` | Detect if SAPI or script change HTTP status
-`Tenny::setPattern(string $pattern, mixed $regex): void` | Add or remove pattern for custom routes, like `/foo/<variable1:pattern>`
-`Tenny::exec([bool $builtin]): bool` | Execute defined route, use `$builtin` for built-in-server for detect if file exists
+`Teeny::path(): string` | Get current path from URL (ignores subfolders if it is located in a subfolder on your webserver)
+`Teeny::status([int $code]): int` | Get or set HTTP status
+`Teeny::action(mixed $methods, string $path, mixd $callback): void` | Add or remove or update a route, supports functions, closures and paths to PHP scripts
+`Teeny::handlerCodes(array $codes, mixd $callback): int` | Detect if SAPI or script change HTTP status
+`Teeny::setPattern(string $pattern, mixed $regex): void` | Add or remove pattern for custom routes, like `/foo/<variable1:pattern>`
+`Teeny::exec([bool $builtin]): bool` | Execute defined route, use `$builtin` for built-in-server for detect if file exists
 
 
 ## Add and remove routes
