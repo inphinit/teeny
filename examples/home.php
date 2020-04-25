@@ -1,4 +1,4 @@
-<h1>Welcome to Tenny</h1>
+<h1>Welcome to Teeny</h1>
 
 <p>Try examples:</p>
 

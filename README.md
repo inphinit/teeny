@@ -3,18 +3,18 @@
 For create your project use:
 
 ```
-composer create-project inphinit/tenny <project name>
+composer create-project inphinit/teeny <project name>
 ```
 
 Replace `<project name>` by your project name, for exemple, if want create your project with "blog" name (folder name), use:
 
 ```
-composer create-project inphinit/tenny blog
+composer create-project inphinit/teeny blog
 ```
 
 ## Download without composer
 
-If is not using `composer` try direct download from https://github.com/inphinit/tenny/releases
+If is not using `composer` try direct download from https://github.com/inphinit/teeny/releases
 
 ## Execute
 
