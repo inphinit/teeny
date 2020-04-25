@@ -63,7 +63,7 @@ class Teeny
         if ($this->code === null) {
             $initial = 200;
 
-            if (preg_match('#/RESERVED\.TENNY\-(\d{3})\.html$#', $_SERVER['PHP_SELF'], $match)) {
+            if (preg_match('#/RESERVED\.TEENY\-(\d{3})\.html$#', $_SERVER['PHP_SELF'], $match)) {
                 $this->code = (int) $match[1];
             }
         }
@@ -93,13 +93,13 @@ class Teeny
      */
     public function action($methods, $path, $callback)
     {
-        $path = '/' . ltrim($path, '/');
-
         if (is_array($methods)) {
             foreach ($methods as $method) {
                 $this->action($method, $path, $callback);
             }
         } else {
+            $path = '/' . ltrim($path, '/');
+
             if (!isset($this->routes[$path])) {
                 $this->routes[$path] = array();
             }
@@ -163,7 +163,7 @@ class Teeny
                 $newCode = 404;
             }
 
-            if ($newCode) {
+            if ($newCode !== 0) {
                 $this->status($newCode);
 
                 $code = $newCode;
@@ -199,7 +199,7 @@ class Teeny
     private function params()
     {
         $method = $this->method;
-        $current = $this->pathinfo;
+        $pathinfo = $this->pathinfo;
         $patterns = $this->paramPatterns;
         $getParams = '#\\\\[<](.*?)(\\\\:(' . implode('|', array_keys($patterns)) . ')|)\\\\[>]#';
 
@@ -212,7 +212,7 @@ class Teeny
                     $path = str_replace('<' . $pattern . '>)', $regex . ')', $path);
                 }
 
-                if (preg_match('#^' . $path . '$#', $current, $params)) {
+                if (preg_match('#^' . $path . '$#', $pathinfo, $params)) {
                     foreach ($params as $key => $match) {
                         if (is_int($key)) {
                             unset($params[$key]);
@@ -232,7 +232,7 @@ class Teeny
     private function dispatch($callback, $code = 0, $params = null)
     {
         if (is_string($callback) && strpos($callback, '.') !== false) {
-            require $callback;
+            TeenyLoader($this, $callback);
         } elseif ($code) {
             echo $callback($code);
         } elseif ($params !== null) {
@@ -254,4 +254,16 @@ class Teeny
             is_file(__DIR__ . '/..' . $path)
         );
     }
+}
+
+/**
+ * Require file
+ *
+ * @param Teeny $app Teeny (or custom) context
+ * @param string $callback file required
+ * @return mixed
+ */
+function TeenyLoader(Teeny $app, $callback)
+{
+    return require $callback;
 }

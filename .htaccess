@@ -5,10 +5,10 @@
 IndexIgnore *
 
 # Redirect page errors to route system
-ErrorDocument 401 /index.php/RESERVED.TENNY-401.html
-ErrorDocument 403 /index.php/RESERVED.TENNY-403.html
-ErrorDocument 500 /index.php/RESERVED.TENNY-500.html
-ErrorDocument 501 /index.php/RESERVED.TENNY-501.html
+ErrorDocument 401 /index.php/RESERVED.TEENY-401.html
+ErrorDocument 403 /index.php/RESERVED.TEENY-403.html
+ErrorDocument 500 /index.php/RESERVED.TEENY-500.html
+ErrorDocument 501 /index.php/RESERVED.TEENY-501.html
 
 RewriteEngine On
 
