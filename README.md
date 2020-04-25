@@ -30,6 +30,7 @@ Method | Description
 `Tenny::status([int $code]): int` | Get or set HTTP status
 `Tenny::action(mixed $methods, string $path, mixd $callback): void` | Add or remove or update a route, supports functions, closures and paths to PHP scripts
 `Tenny::handlerCodes(array $codes, mixd $callback): int` | Detect if SAPI or script change HTTP status
+`Tenny::setPattern(string $pattern, mixed $regex): void` | Add or remove pattern for custom routes, like `/foo/<variable1:pattern>`
 `Tenny::exec([bool $builtin]): bool` | Execute defined route, use `$builtin` for built-in-server for detect if file exists
 
 
@@ -42,6 +43,15 @@ $app->action('GET', '/myroute', function () {
     echo 'Test!';
 });
 ```
+
+You can use `return`:
+
+```php
+$app->action('GET', '/myroute', function () {
+    return 'Test!';
+});
+```
+
 
 For remove a route use `null` value, like this:
 
@@ -182,3 +192,11 @@ Type | Example | Description
 `num` | `$app->action('GET', '/foo/<id:num>', ...);` | Only accepts parameters with integer format and `$params` returns `array( id => ...)`
 `uuid` | `$app->action('GET', '/bar/<barcode:alnum>', ...);` | Only accepts parameters with uuid format and `$params` returns `array( barcode => ...)`
 `version` | `$app->action('GET', '/baz/<api:version>', ...);` | Only accepts parameters with [semversion (v2)](https://semver.org/spec/v2.0.0.html) format and `$params` returns `array( api => ...)`
+
+For add new patterns use like this `$app->setPattern('example', '[A-Z]\d+');`, in routes use:
+
+```php
+$app->action('GET', '/test/<mytest:example>', function () use ($app) {
+    var_dump($app->params['mytest']);
+});
+```

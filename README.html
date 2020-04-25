@@ -1095,6 +1095,10 @@ body .markdown-body
 <td>Detect if SAPI or script change HTTP status</td>
 </tr>
 <tr>
+<td><code>Tenny::setPattern(string $pattern, mixed $regex): void</code></td>
+<td>Add or remove pattern for custom routes, like <code>/foo/&lt;variable1:pattern&gt;</code></td>
+</tr>
+<tr>
 <td><code>Tenny::exec([bool $builtin]): bool</code></td>
 <td>Execute defined route, use <code>$builtin</code> for built-in-server for detect if file exists</td>
 </tr>
@@ -1104,6 +1108,12 @@ body .markdown-body
 <p>For create a new route in <code>index.php</code> put like this:</p>
 <div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/myroute&#39;, function () {</span>
 <span class="x">    echo &#39;Test!&#39;;</span>
+<span class="x">});</span>
+</pre></div>
+
+<p>You can use <code>return</code>:</p>
+<div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/myroute&#39;, function () {</span>
+<span class="x">    return &#39;Test!&#39;;</span>
 <span class="x">});</span>
 </pre></div>
 
@@ -1213,9 +1223,9 @@ Article name: 1000
 </thead>
 <tbody>
 <tr>
-<td><code>num</code></td>
-<td><code>$app-&gt;action('GET', '/foo/&lt;id:num&gt;', ...);</code></td>
-<td>Only accepts parameters with numeric format and <code>$params</code> returns <code>array( id =&gt; ...)</code></td>
+<td><code>alnum</code></td>
+<td><code>$app-&gt;action('GET', '/baz/&lt;video:alnum&gt;', ...);</code></td>
+<td>Only accepts parameters with alpha-numeric format and <code>$params</code> returns <code>array( video =&gt; ...)</code></td>
 </tr>
 <tr>
 <td><code>alpha</code></td>
@@ -1223,9 +1233,29 @@ Article name: 1000
 <td>Only accepts parameters with alpha format and <code>$params</code> returns <code>array( name =&gt; ...)</code></td>
 </tr>
 <tr>
-<td><code>alnum</code></td>
-<td><code>$app-&gt;action('GET', '/baz/&lt;barcode:alnum&gt;', ...);</code></td>
-<td>Only accepts parameters with alpha-numeric format and <code>$params</code> returns <code>array( barcode =&gt; ...)</code></td>
+<td><code>decimal</code></td>
+<td><code>$app-&gt;action('GET', '/baz/&lt;price:decimal&gt;', ...);</code></td>
+<td>Only accepts parameters with decimal format and <code>$params</code> returns <code>array( price =&gt; ...)</code></td>
+</tr>
+<tr>
+<td><code>num</code></td>
+<td><code>$app-&gt;action('GET', '/foo/&lt;id:num&gt;', ...);</code></td>
+<td>Only accepts parameters with integer format and <code>$params</code> returns <code>array( id =&gt; ...)</code></td>
+</tr>
+<tr>
+<td><code>uuid</code></td>
+<td><code>$app-&gt;action('GET', '/bar/&lt;barcode:alnum&gt;', ...);</code></td>
+<td>Only accepts parameters with uuid format and <code>$params</code> returns <code>array( barcode =&gt; ...)</code></td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td><code>$app-&gt;action('GET', '/baz/&lt;api:version&gt;', ...);</code></td>
+<td>Only accepts parameters with <a href="https://semver.org/spec/v2.0.0.html">semversion (v2)</a> format and <code>$params</code> returns <code>array( api =&gt; ...)</code></td>
 </tr>
 </tbody>
-</table></article></body></html>
+</table>
+<p>For add new patterns use like this <code>$app-&gt;setPattern('example', '[A-Z]\d+');</code>, in routes use:</p>
+<div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/test/&lt;mytest:example&gt;&#39;, function () use ($app) {</span>
+<span class="x">    var_dump($app-&gt;params[&#39;mytest&#39;]);</span>
+<span class="x">});</span>
+</pre></div></article></body></html>

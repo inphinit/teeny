@@ -1,14 +1,24 @@
 <?php
 class Teeny
 {
-    private $routes = array();
     private $codes = array();
+    private $routes = array();
 
+    private $code = 200;
     private $method;
     private $pathinfo;
-    private $code = 200;
 
     private $hasParams = false;
+    private $paramPatterns = array(
+        'alnum' => '[\da-zA-Z]+',
+        'alpha' => '[a-zA-Z]+',
+        'decimal' => '\d+\.\d+',
+        'num' => '\d+',
+        'noslash' => '[^\/]+',
+        'nospace' => '\S+',
+        'uuid' => '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}',
+        'version' => '\d+\.\d+(\.\d+(-[\da-zA-Z]+(\.[\da-zA-Z]+)*(\+[\da-zA-Z]+(\.[\da-zA-Z]+)*)?)?)?'
+    );
 
     public function __construct()
     {
@@ -23,21 +33,16 @@ class Teeny
     public function path()
     {
         if ($this->pathinfo === null) {
-            $requri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+            $requri = urldecode(strtok($_SERVER['REQUEST_URI'], '?'));
             $sname = $_SERVER['SCRIPT_NAME'];
+            $sdir = dirname($sname);
 
-            if ($requri !== $sname && $sname !== '/index.php') {
-                $pathinfo = rtrim(strtr(dirname($sname), '\\', '/'), '/');
-                $pathinfo = substr($requri, strlen($pathinfo));
-
-                if ($pathinfo === false) {
-                    $this->pathinfo = '/';
-                } else {
-                    $this->pathinfo = $pathinfo;
-                }
-            } else {
-                $this->pathinfo = $requri;
+            if ($sdir !== '\\' && $sdir !== '/' && $requri !== $sname && $requri !== $sdir) {
+                $sdir = rtrim($sdir, '/');
+                $requri = substr($requri, strlen($sdir));
             }
+
+            $this->pathinfo = $requri;
         }
 
         return $this->pathinfo;
@@ -88,6 +93,8 @@ class Teeny
      */
     public function action($methods, $path, $callback)
     {
+        $path = '/' . ltrim($path, '/');
+
         if (is_array($methods)) {
             foreach ($methods as $method) {
                 $this->action($method, $path, $callback);
@@ -163,7 +170,7 @@ class Teeny
             }
         }
 
-        if ($newCode && isset($this->codes[$newCode])) {
+        if ($newCode !== 0 && isset($this->codes[$newCode])) {
             $callback = $this->codes[$newCode];
         }
 
@@ -174,24 +181,38 @@ class Teeny
         return true;
     }
 
+    /**
+     * Create or remove a pattern for URL slugs
+     *
+     * @param string|null $pattern Set pattern for URL slug params like this /foo/<var:pattern>
+     * @return void
+     */
+    public function setPattern($pattern, $regex)
+    {
+        if ($regex === null) {
+            unset($this->paramPatterns[preg_quote($pattern)]);
+        } else {
+            $this->paramPatterns[preg_quote($pattern)] = $regex;
+        }
+    }
+
     private function params()
     {
-        $current = $this->pathinfo;
         $method = $this->method;
+        $current = $this->pathinfo;
+        $patterns = $this->paramPatterns;
+        $getParams = '#\\\\[<](.*?)(\\\\:(' . implode('|', array_keys($patterns)) . ')|)\\\\[>]#';
 
         foreach ($this->routes as $path => $value) {
             if (isset($value[$method]) && strpos($path, '<') !== false) {
-                $path = preg_replace('#\\\\[<](.*?)(\\\\:(alnum|alpha|decimal|num|uuid|version)|)\\\\[>]#i', '(?<$1><$3>)', preg_quote($path));
-
+                $path = preg_replace($getParams, '(?<$1><$3>)', preg_quote($path));
                 $path = str_replace('<>)', '.*?)', $path);
-                $path = str_replace('<alnum>)', '[a-z\d]+)', $path);
-                $path = str_replace('<alpha>)', '[a-z]+)', $path);
-                $path = str_replace('<decimal>)', '\d+\.\d+)', $path);
-                $path = str_replace('<num>)', '\d+)', $path);
-                $path = str_replace('<uuid>)', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', $path);
-                $path = str_replace('<version>)', '\d+\.\d+(\.\d+(-[\da-z]+(\.[\da-z]+)*(\+[\da-z]+(\.[\da-z]+)*)?)?)?)', $path);
 
-                if (preg_match('#^' . $path . '$#i', $current, $params)) {
+                foreach ($patterns as $pattern => $regex) {
+                    $path = str_replace('<' . $pattern . '>)', $regex . ')', $path);
+                }
+
+                if (preg_match('#^' . $path . '$#', $current, $params)) {
                     foreach ($params as $key => $match) {
                         if (is_int($key)) {
                             unset($params[$key]);
@@ -213,11 +234,11 @@ class Teeny
         if (is_string($callback) && strpos($callback, '.') !== false) {
             require $callback;
         } elseif ($code) {
-            $callback($code);
+            echo $callback($code);
         } elseif ($params !== null) {
-            $callback($params);
+            echo $callback($params);
         } else {
-            $callback();
+            echo $callback();
         }
     }
 

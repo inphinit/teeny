@@ -57,26 +57,40 @@ $app->action('GET', '/blog/<name>-<id:num>', function ($params) {
 });
 
 // Example: http://localhost:8000/test/foo-1000
-$app->action('GET', '/test/<id:num>', 'teste');
+$app->action('GET', '/test/<id:num>', 'testCallback');
 
 // Example: http://localhost:8000/test/foo/abc
-$app->action('GET', '/test/foo/<name:alpha>', 'teste');
+$app->action('GET', '/test/foo/<name:alpha>', 'testCallback');
 
 // Example: http://localhost:8000/test/bar/f0f0f0
-$app->action('GET', '/test/bar/<barcode:alnum>', 'teste');
+$app->action('GET', '/test/bar/<barcode:alnum>', 'testCallback');
 
-$app->action('GET', '/decimal/<value:decimal>', 'teste');
+$app->action('GET', '/decimal/<value:decimal>', 'testCallback');
 
-$app->action('GET', '/uuid/<value:uuid>', 'teste');
+$app->action('GET', '/uuid/<value:uuid>', 'testCallback');
 
-$app->action('GET', '/version/<value:version>', 'teste');
+$app->action('GET', '/version/<value:version>', 'testCallback');
 
-function teste($params) {
-    echo '<h1>Results:</h1>';
+function testCallback($params) {
+    echo '<h1>Results testCallback():</h1>';
     echo '<pre>';
     print_r($params);
     echo '</pre>';
 }
+
+$app->action('GET', '/noslash/<value:noslash>', function ($params) {
+    echo '<h1>noslash</h1>';
+    echo '<pre>';
+    print_r($params);
+    echo '</pre>';
+});
+
+$app->action('GET', '/nospace/<value:nospace>', function ($params) {
+    echo '<h1>nospace</h1>';
+    echo '<pre>';
+    print_r($params);
+    echo '</pre>';
+});
 
 //Handle the HTTP response when the code is different than 200
 $app->handlerCodes(array(404, 405), function ($code) {

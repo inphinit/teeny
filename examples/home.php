@@ -15,10 +15,17 @@
     <li><a href="./test/bar/f0f0f0"><code>/test/bar/&lt;barcode:alnum></code></a></li>
     <li><a href="./decimal/1.0"><code>/decimal/&lt;value:decimal></code></a></li>
     <li><a href="./uuid/3d0ca315-aff9-4fc2-be61-3b76b9a2d798"><code>/uuid/&lt;value:uuid></code></a></li>
+
     <li><a href="./version/1.0"><code>/decimal/&lt;value:version></code></a></li>
     <li><a href="./version/1.0.1"><code>/version/&lt;value:version></code></a></li>
     <li><a href="./version/1.0.0-rc5"><code>/version/&lt;value:version></code></a></li>
     <li><a href="./version/2.3.1-rc5.a4.z0"><code>/version/&lt;value:version></code></a></li>
     <li><a href="./version/2.3.1-rc5.a4.z0%2Bb100"><code>/version/&lt;value:version></code></a></li>
     <li><a href="./version/2.3.1-rc5.a4.z0%2Bb1.b2"><code>/version/&lt;value:version></code></a></li>
+
+    <li><a href="./noslash/abc"><code>/noslash/&lt;name:noslash></code></a></li>
+    <li><a href="./noslash/a/b/c"><code>/noslash/&lt;name:noslash> (invalid example)</code></a></li>
+
+    <li><a href="./nospace/a-b-c/ção"><code>/noslash/&lt;name:nospace></code></a></li>
+    <li><a href="./nospace/a%20b+c"><code>/noslash/&lt;name:nospace> (invalid example)</code></a></li>
 </ul>
