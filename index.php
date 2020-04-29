@@ -92,6 +92,16 @@ $app->action('GET', '/nospace/<value:nospace>', function ($params) {
     echo '</pre>';
 });
 
+// custom pattern
+$app->action('GET', '/custom/<myexample:example>', function ($params) use ($app) {
+    echo '<h1>custom pattern</h1>';
+    echo '<pre>';
+    print_r($params);
+    echo '</pre>';
+});
+
+$app->setPattern('example', '[A-Z]\d+');
+
 //Handle the HTTP response when the code is different than 200
 $app->handlerCodes(array(404, 405), function ($code) {
     echo 'Custom page error ', $code;

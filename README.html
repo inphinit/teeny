@@ -1087,11 +1087,11 @@ body .markdown-body
 <td>Get or set HTTP status</td>
 </tr>
 <tr>
-<td><code>Teeny::action(mixed $methods, string $path, mixd $callback): void</code></td>
+<td><code>Teeny::action(mixed $methods, string $path, mixed $callback): void</code></td>
 <td>Add or remove or update a route, supports functions, closures and paths to PHP scripts</td>
 </tr>
 <tr>
-<td><code>Teeny::handlerCodes(array $codes, mixd $callback): int</code></td>
+<td><code>Teeny::handlerCodes(array $codes, mixed $callback): int</code></td>
 <td>Detect if SAPI or script change HTTP status</td>
 </tr>
 <tr>
@@ -1243,6 +1243,16 @@ Article name: 1000
 <td>Only accepts parameters with integer format and <code>$params</code> returns <code>array( id =&gt; ...)</code></td>
 </tr>
 <tr>
+<td><code>noslash</code></td>
+<td><code>$app-&gt;action('GET', '/foo/&lt;noslash:noslash&gt;', ...);</code></td>
+<td>Accpets any characters expcet slashs (<code>/</code>)</td>
+</tr>
+<tr>
+<td><code>nospace</code></td>
+<td><code>$app-&gt;action('GET', '/foo/&lt;nospace:nospace&gt;', ...);</code></td>
+<td>Accpets any characters expcet spaces, like white-spaces (<code>%20</code>), tabs (<code>%0A</code>) and others (see about <code>\S</code> in regex)</td>
+</tr>
+<tr>
 <td><code>uuid</code></td>
 <td><code>$app-&gt;action('GET', '/bar/&lt;barcode:alnum&gt;', ...);</code></td>
 <td>Only accepts parameters with uuid format and <code>$params</code> returns <code>array( barcode =&gt; ...)</code></td>
@@ -1254,8 +1264,15 @@ Article name: 1000
 </tr>
 </tbody>
 </table>
-<p>For add new patterns use like this <code>$app-&gt;setPattern('example', '[A-Z]\d+');</code>, in routes use:</p>
-<div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/test/&lt;mytest:example&gt;&#39;, function () use ($app) {</span>
-<span class="x">    var_dump($app-&gt;params[&#39;mytest&#39;]);</span>
+<p>For add new patterns use like this <code>Teeny::setPattern()</code>, examples:</p>
+<div class="codehilite"><pre><span class="x">$app-&gt;setPattern(&#39;example&#39;, &#39;[A-Z]\d+&#39;);</span>
+
+<span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/custom/&lt;myexample:example&gt;&#39;, function ($params) use ($app) {</span>
+<span class="x">    echo &#39;&lt;h1&gt;custom pattern&lt;/h1&gt;&#39;;</span>
+<span class="x">    echo &#39;&lt;pre&gt;&#39;;</span>
+<span class="x">    print_r($params);</span>
+<span class="x">    echo &#39;&lt;/pre&gt;&#39;;</span>
 <span class="x">});</span>
-</pre></div></article></body></html>
+</pre></div>
+
+<p>And for access this route exemple use <code>http://mysite/test/A00001</code> or <code>http://mysite/test/C02</code>, start with upper-case letter and after width a integer number</p></article></body></html>

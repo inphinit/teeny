@@ -28,8 +28,8 @@ Method | Description
 ---|---
 `Teeny::path(): string` | Get current path from URL (ignores subfolders if it is located in a subfolder on your webserver)
 `Teeny::status([int $code]): int` | Get or set HTTP status
-`Teeny::action(mixed $methods, string $path, mixd $callback): void` | Add or remove or update a route, supports functions, closures and paths to PHP scripts
-`Teeny::handlerCodes(array $codes, mixd $callback): int` | Detect if SAPI or script change HTTP status
+`Teeny::action(mixed $methods, string $path, mixed $callback): void` | Add or remove or update a route, supports functions, closures and paths to PHP scripts
+`Teeny::handlerCodes(array $codes, mixed $callback): int` | Detect if SAPI or script change HTTP status
 `Teeny::setPattern(string $pattern, mixed $regex): void` | Add or remove pattern for custom routes, like `/foo/<variable1:pattern>`
 `Teeny::exec([bool $builtin]): bool` | Execute defined route, use `$builtin` for built-in-server for detect if file exists
 
@@ -190,13 +190,22 @@ Type | Example | Description
 `alpha` | `$app->action('GET', '/foo/bar/<name:alpha>', ...);` | Only accepts parameters with alpha format and `$params` returns `array( name => ...)`
 `decimal` | `$app->action('GET', '/baz/<price:decimal>', ...);` | Only accepts parameters with decimal format and `$params` returns `array( price => ...)`
 `num` | `$app->action('GET', '/foo/<id:num>', ...);` | Only accepts parameters with integer format and `$params` returns `array( id => ...)`
+`noslash` | `$app->action('GET', '/foo/<noslash:noslash>', ...);` | Accpets any characters expcet slashs (`/`)
+`nospace` | `$app->action('GET', '/foo/<nospace:nospace>', ...);` | Accpets any characters expcet spaces, like white-spaces (`%20`), tabs (`%0A`) and others (see about `\S` in regex)
 `uuid` | `$app->action('GET', '/bar/<barcode:alnum>', ...);` | Only accepts parameters with uuid format and `$params` returns `array( barcode => ...)`
 `version` | `$app->action('GET', '/baz/<api:version>', ...);` | Only accepts parameters with [semversion (v2)](https://semver.org/spec/v2.0.0.html) format and `$params` returns `array( api => ...)`
 
-For add new patterns use like this `$app->setPattern('example', '[A-Z]\d+');`, in routes use:
+For add new patterns use like this `Teeny::setPattern()`, examples:
 
 ```php
-$app->action('GET', '/test/<mytest:example>', function () use ($app) {
-    var_dump($app->params['mytest']);
+$app->setPattern('example', '[A-Z]\d+');
+
+$app->action('GET', '/custom/<myexample:example>', function ($params) use ($app) {
+    echo '<h1>custom pattern</h1>';
+    echo '<pre>';
+    print_r($params);
+    echo '</pre>';
 });
 ```
+
+And for access this route exemple use `http://mysite/test/A00001` or `http://mysite/test/C02`, start with upper-case letter and after width a integer number
