@@ -5,6 +5,7 @@
 <ul>
     <li><a href="./include"><code>/include</code></a></li>
     <li><a href="./about"><code>/about</code></a></li>
+    <li><a href="./memory"><code>/memory</code></a></li>
     <li><a href="./foo/bar"><code>/foo/bar</code></a></li>
     <li><a href="./foo/test/test1"><code>/foo/&lt;foo>/&lt;bar></code></a></li>
     <li><a href="./foo/test-test2"><code>/foo/&lt;foo>-&lt;bar></code></a></li>
@@ -29,3 +30,12 @@
     <li><a href="./nospace/a-b-c/ção"><code>/noslash/&lt;name:nospace></code></a></li>
     <li><a href="./nospace/a%20b+c"><code>/noslash/&lt;name:nospace> (invalid example)</code></a></li>
 </ul>
+
+<hr>
+
+<aside>
+    <p>
+        If you need more features you can experience the <strong>Inphinit PHP framework</strong>:
+        <a href="https://inphinit.github.io" target="_blank" rel="external">https://inphinit.github.io</a>
+    </p>
+</aside>

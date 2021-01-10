@@ -1,3 +1,5 @@
+Teeny is a micro-route system that is really micro, supports **PHP 5.3** to **PHP 8** and **HHVM**, is extremely simple and ready to use.
+
 ## Install using composer
 
 For create your project use:
@@ -192,3 +194,7 @@ $app->action('GET', '/custom/<myexample:example>', function ($params) use ($app)
 ```
 
 And for access this route exemple use `http://mysite/test/A00001` or `http://mysite/test/C02`, start with upper-case letter and after width a integer number
+
+---
+
+If you need more features you can experience the **Inphinit PHP framework**: https://inphinit.github.io
