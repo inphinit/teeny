@@ -1162,16 +1162,6 @@ Fatal error: require(): Failed opening required &#39;foo/bar/test.php&#39; (incl
 <span class="x">});</span>
 </pre></div>
 
-<h2 id="built-in-web-server-vs-normal-web-servers">Built-in web-server vs normal web-servers<a class="headerlink" href="#built-in-web-server-vs-normal-web-servers" title="Permanent link"></a></h2>
-<p>In normal servers you can use like this:</p>
-<div class="codehilite"><pre><span class="x">return $app-&gt;exec();</span>
-</pre></div>
-
-<p>In built-in web-sever use exactly that way:</p>
-<div class="codehilite"><pre><span class="x">return $app-&gt;exec(true);</span>
-</pre></div>
-
-<p>This way can be used on normal servers, it has no effect on normal servers.</p>
 <h2 id="named-params-in-route">Named params in route<a class="headerlink" href="#named-params-in-route" title="Permanent link"></a></h2>
 <p>You can use params like this:</p>
 <div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/user/&lt;user&gt;&#39;, function ($params) {</span>

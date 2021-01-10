@@ -114,23 +114,6 @@ $app->action('GET', '/report', function () use ($app) {
 });
 ```
 
-## Built-in web-server vs normal web-servers
-
-In normal servers you can use like this:
-
-```php
-return $app->exec();
-```
-
-In built-in web-sever use exactly that way:
-
-```php
-return $app->exec(true);
-```
-
-This way can be used on normal servers, it has no effect on normal servers.
-
-
 ## Named params in route
 
 You can use params like this:
