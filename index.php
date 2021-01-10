@@ -4,7 +4,7 @@ require_once 'vendor/teeny.php';
 //Uncomment next line for composer projects
 # require_once 'vendor/autoload.php';
 
-$app = new Teeny;
+$app = new \Inphinit\Teeny;
 
 $app->action('GET', '/', 'examples/home.php');
 
@@ -12,6 +12,10 @@ $app->action('GET', '/include', 'examples/foo.php');
 
 $app->action('GET', '/about', function () {
     echo 'Teeny is very small and easy route system';
+});
+
+$app->action('GET', '/memory', function () {
+    echo 'memory peak usage: ', round(memory_get_peak_usage() / 1024 / 1024, 3), 'MB';
 });
 
 $app->action('POST', '/foo/bar', function () {

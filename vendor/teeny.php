@@ -1,4 +1,13 @@
 <?php
+namespace Inphinit;
+
+/**
+* Based on Inphinit\Routing\Route class
+*
+* @author   Guilherme Nascimento <brcontainer@yahoo.com.br>
+* @version  0.2.0
+* @see      https://github.com/inphinit/framework/blob/master/src/Inphinit/Routing/Route.php
+*/
 class Teeny
 {
     private $codes = array();
@@ -129,10 +138,9 @@ class Teeny
     /**
      * Execute application
      *
-     * @param bool $builtin Check file in built-in web-server
      * @return bool
      */
-    public function exec($builtin = false)
+    public function exec()
     {
         $callback = null;
         $newCode = 0;
@@ -141,7 +149,7 @@ class Teeny
         if ($code === 200) {
             $path = $this->path();
 
-            if ($builtin && $this->builtinFile()) {
+            if (PHP_SAPI === 'cli-server' && $this->builtinFile()) {
                 return false;
             }
         
@@ -165,8 +173,6 @@ class Teeny
 
             if ($newCode !== 0) {
                 $this->status($newCode);
-
-                $code = $newCode;
             }
         }
 
@@ -248,7 +254,6 @@ class Teeny
 
         return (
             $path !== '/' &&
-            PHP_SAPI === 'cli-server' &&
             strcasecmp($path, '/vendor') !== 0 &&
             stripos($path, '/vendor/') !== 0 &&
             is_file(__DIR__ . '/..' . $path)
