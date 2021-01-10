@@ -31,7 +31,7 @@ Method | Description
 `Teeny::action(mixed $methods, string $path, mixed $callback): void` | Add or remove or update a route, supports functions, closures and paths to PHP scripts
 `Teeny::handlerCodes(array $codes, mixed $callback): int` | Detect if SAPI or script change HTTP status
 `Teeny::setPattern(string $pattern, mixed $regex): void` | Add or remove pattern for custom routes, like `/foo/<variable1:pattern>`
-`Teeny::exec([bool $builtin]): bool` | Execute defined route, use `$builtin` for built-in-server for detect if file exists
+`Teeny::exec(): bool` | Execute defined route
 
 
 ## Add and remove routes
