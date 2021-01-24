@@ -113,7 +113,7 @@ class Teeny
                 $this->routes[$path] = array();
             }
 
-            if (strpos($path, '<') !==false && $callback) {
+            if (strpos($path, '<') !== false && $callback) {
                 $this->hasParams = true;
             }
 
@@ -144,9 +144,8 @@ class Teeny
     {
         $callback = null;
         $newCode = 0;
-        $code = $this->status();
 
-        if ($code === 200) {
+        if ($this->status() === 200) {
             $path = $this->path();
 
             if (PHP_SAPI === 'cli-server' && $this->builtinFile()) {

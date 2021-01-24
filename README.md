@@ -1,4 +1,4 @@
-Teeny is a micro-route system that is really micro, supports **PHP 5.3** to **PHP 8** and **HHVM**, is extremely simple and ready to use.
+Teeny is a micro-route system that is really micro, supports **PHP 5.3** to **PHP 8**, is extremely simple and ready to use.
 
 ## Install using composer
 
