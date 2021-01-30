@@ -5,7 +5,7 @@ namespace Inphinit;
  * Based on Inphinit\Routing\Route class
  *
  * @author   Guilherme Nascimento <brcontainer@yahoo.com.br>
- * @version  0.2.1
+ * @version  0.2.2
  * @see      https://github.com/inphinit/framework/blob/master/src/Inphinit/Routing/Route.php
  */
 class Teeny
