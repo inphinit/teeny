@@ -2,19 +2,18 @@
 namespace Inphinit;
 
 /**
-* Based on Inphinit\Routing\Route class
-*
-* @author   Guilherme Nascimento <brcontainer@yahoo.com.br>
-* @version  0.2.0
-* @see      https://github.com/inphinit/framework/blob/master/src/Inphinit/Routing/Route.php
-*/
+ * Based on Inphinit\Routing\Route class
+ *
+ * @author   Guilherme Nascimento <brcontainer@yahoo.com.br>
+ * @version  0.2.1
+ * @see      https://github.com/inphinit/framework/blob/master/src/Inphinit/Routing/Route.php
+ */
 class Teeny
 {
     private $codes = array();
     private $routes = array();
 
     private $code = 200;
-    private $method;
     private $pathinfo;
 
     private $hasParams = false;
@@ -69,12 +68,8 @@ class Teeny
             return http_response_code($code);
         }
 
-        if ($this->code === null) {
-            $initial = 200;
-
-            if (preg_match('#/RESERVED\.TEENY\-(\d{3})\.html$#', $_SERVER['PHP_SELF'], $match)) {
-                $this->code = (int) $match[1];
-            }
+        if ($code === null && preg_match('#/RESERVED\.TEENY-(\d{3})\.html#', $_SERVER['PHP_SELF'], $match)) {
+            $this->code = (int) $match[1];
         }
 
         if ($code === null || $this->code === $code) {
@@ -142,45 +137,45 @@ class Teeny
      */
     public function exec()
     {
+        $code = $this->status();
         $callback = null;
-        $newCode = 0;
 
-        if ($this->status() === 200) {
+        if ($code === 200) {
             $path = $this->path();
 
             if (PHP_SAPI === 'cli-server' && $this->builtinFile()) {
                 return false;
             }
-        
-            $this->method = $_SERVER['REQUEST_METHOD'];
+
+            $method = $_SERVER['REQUEST_METHOD'];
 
             if (isset($this->routes[$path])) {
                 $routes = &$this->routes[$path];
 
-                if (isset($routes[$this->method])) {
-                    $callback = $routes[$this->method];
+                if (isset($routes[$method])) {
+                    $callback = $routes[$method];
                 } elseif (isset($routes['ANY'])) {
                     $callback = $routes['ANY'];
                 } else {
-                    $newCode = 405;
+                    $code = 405;
                 }
-            } elseif ($this->hasParams && $this->params()) {
+            } elseif ($this->hasParams && $this->params($method)) {
                 return true;
             } else {
-                $newCode = 404;
-            }
-
-            if ($newCode !== 0) {
-                $this->status($newCode);
+                $code = 404;
             }
         }
 
-        if ($newCode !== 0 && isset($this->codes[$newCode])) {
-            $callback = $this->codes[$newCode];
+        if ($code !== 200) {
+            $this->status($code);
+
+            if (isset($this->codes[$code])) {
+                $callback = $this->codes[$code];
+            }
         }
 
-        if ($callback) {
-            $this->dispatch($callback, $newCode, null);
+        if ($callback !== null) {
+            $this->dispatch($callback, $code, null);
         }
 
         return true;
@@ -201,9 +196,8 @@ class Teeny
         }
     }
 
-    private function params()
+    private function params($method)
     {
-        $method = $this->method;
         $pathinfo = $this->pathinfo;
         $patterns = $this->paramPatterns;
         $getParams = '#\\\\[<](.*?)(\\\\:(' . implode('|', array_keys($patterns)) . ')|)\\\\[>]#';

@@ -16,8 +16,7 @@ RewriteEngine On
 RewriteRule ^(vendor/|vendor$) index.php [L]
 
 # Check file or folders exists
-RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 
-# Redirect all urls to index.php if no exits files/folder
+# Redirect all urls to index.php if no exits files
 RewriteRule ^ index.php [L]

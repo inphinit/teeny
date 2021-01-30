@@ -107,7 +107,7 @@ $app->action('GET', '/custom/<myexample:example>', function ($params) use ($app)
 $app->setPattern('example', '[A-Z]\d+');
 
 //Handle the HTTP response when the code is different than 200
-$app->handlerCodes(array(404, 405), function ($code) {
+$app->handlerCodes(array(403, 404, 405), function ($code) {
     echo 'Custom page error ', $code;
 });
 
