@@ -5,7 +5,7 @@ namespace Inphinit;
  * Based on Inphinit\Routing\Route class
  *
  * @author   Guilherme Nascimento <brcontainer@yahoo.com.br>
- * @version  0.2.2
+ * @version  0.2.3
  * @see      https://github.com/inphinit/framework/blob/master/src/Inphinit/Routing/Route.php
  */
 class Teeny
@@ -159,24 +159,14 @@ class Teeny
                 } else {
                     $code = 405;
                 }
-            } elseif ($this->hasParams && $this->params($method)) {
-                return true;
+            } elseif ($this->hasParams) {
+                $code = $this->params($method);
             } else {
                 $code = 404;
             }
         }
 
-        if ($code !== 200) {
-            $this->status($code);
-
-            if (isset($this->codes[$code])) {
-                $callback = $this->codes[$code];
-            }
-        }
-
-        if ($callback !== null) {
-            $this->dispatch($callback, $code, null);
-        }
+        $this->dispatch($callback, $code, null);
 
         return true;
     }
@@ -202,8 +192,8 @@ class Teeny
         $patterns = $this->paramPatterns;
         $getParams = '#\\\\[<](.*?)(\\\\:(' . implode('|', array_keys($patterns)) . ')|)\\\\[>]#';
 
-        foreach ($this->routes as $path => $value) {
-            if (isset($value[$method]) && strpos($path, '<') !== false) {
+        foreach ($this->routes as $path => $routes) {
+            if (strpos($path, '<') !== false) {
                 $path = preg_replace($getParams, '(?<$1><$3>)', preg_quote($path));
                 $path = str_replace('<>)', '.*?)', $path);
 
@@ -212,28 +202,36 @@ class Teeny
                 }
 
                 if (preg_match('#^' . $path . '$#', $pathinfo, $params)) {
-                    foreach ($params as $key => $match) {
-                        if (is_int($key)) {
-                            unset($params[$key]);
-                        }
+                    $code = 200;
+
+                    if (isset($routes[$method])) {
+                        $callback = $routes[$method];
+                    } elseif (isset($routes['ANY'])) {
+                        $callback = $routes['ANY'];
+                    } else {
+                        $code = 405;
+                        $callback = null;
                     }
 
-                    $this->dispatch($value[$method], 0, $params);
-
-                    return true;
+                    return $this->dispatch($callback, $code, $params);
                 }
             }
         }
 
-        return false;
+        return 404;
     }
 
-    private function dispatch($callback, $code = 0, $params = null)
+    private function dispatch($callback, $code, $params)
     {
-        if (is_string($callback) && strpos($callback, '.') !== false) {
+        if ($code !== 200) {
+            $this->status($code);
+
+            if (isset($this->codes[$code])) {
+                $callback = $this->codes[$code];
+                echo $callback($code);
+            }
+        } elseif (is_string($callback) && strpos($callback, '.') !== false) {
             TeenyLoader($this, $callback);
-        } elseif ($code) {
-            echo $callback($code);
         } elseif ($params !== null) {
             echo $callback($params);
         } else {

@@ -28,7 +28,7 @@ $app->action('PUT', '/cat', function () use ($app) {
     echo 'Resource created';
 });
 
-$app->action('GET', '/foo/<foo>/<bar>', function ($params) {
+$app->action('POST', '/foo/<foo>/<bar>', function ($params) {
     echo 'response from /&lt;foo>/&lt;bar>';
     echo '<pre>';
     print_r($params);
@@ -55,7 +55,7 @@ $app->action('GET', '/article/<name>/<id>', function ($params) use ($app) {
 });
 
 // Example: http://localhost:8000/blog/foo-1000
-$app->action('GET', '/blog/<name>-<id:num>', function ($params) {
+$app->action('POST', '/blog/<name>-<id:num>', function ($params) {
     echo 'Article ID: ', $params['id'], '<br>';
     echo 'Article name: ', $params['name'];
 });
