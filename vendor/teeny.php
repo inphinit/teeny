@@ -5,13 +5,14 @@ namespace Inphinit;
  * Based on Inphinit\Routing\Route class
  *
  * @author   Guilherme Nascimento <brcontainer@yahoo.com.br>
- * @version  0.2.3
+ * @version  0.2.4
  * @see      https://github.com/inphinit/framework/blob/master/src/Inphinit/Routing/Route.php
  */
 class Teeny
 {
     private $codes = array();
     private $routes = array();
+    private $paramRoutes = array();
 
     private $code = 200;
     private $pathinfo;
@@ -97,22 +98,28 @@ class Teeny
      */
     public function action($methods, $path, $callback)
     {
-        if (is_array($methods)) {
-            foreach ($methods as $method) {
-                $this->action($method, $path, $callback);
-            }
-        } else {
-            $path = '/' . ltrim($path, '/');
+        $path = '/' . ltrim($path, '/');
 
-            if (!isset($this->routes[$path])) {
-                $this->routes[$path] = array();
-            }
+        if (strpos($path, '<') !== false) {
+            $routes = &$this->paramRoutes;
 
-            if (strpos($path, '<') !== false && $callback) {
+            if ($callback) {
                 $this->hasParams = true;
             }
+        } else {
+            $routes = &$this->routes;
+        }
 
-            $this->routes[$path][strtoupper(trim($methods))] = $callback;
+        if (!isset($routes[$path])) {
+            $routes[$path] = array();
+        }
+
+        if (is_array($methods)) {
+            foreach ($methods as $method) {
+                $routes[$path][strtoupper(trim($method))] = $callback;
+            }
+        } else {
+            $routes[$path][strtoupper(trim($methods))] = $callback;
         }
     }
 
@@ -192,7 +199,7 @@ class Teeny
         $patterns = $this->paramPatterns;
         $getParams = '#\\\\[<](.*?)(\\\\:(' . implode('|', array_keys($patterns)) . ')|)\\\\[>]#';
 
-        foreach ($this->routes as $path => $routes) {
+        foreach ($this->paramRoutes as $path => $routes) {
             if (strpos($path, '<') !== false) {
                 $path = preg_replace($getParams, '(?<$1><$3>)', preg_quote($path));
                 $path = str_replace('<>)', '.*?)', $path);
