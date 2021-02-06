@@ -5,7 +5,7 @@ namespace Inphinit;
  * Based on Inphinit\Routing\Route class
  *
  * @author   Guilherme Nascimento <brcontainer@yahoo.com.br>
- * @version  0.2.4
+ * @version  0.2.5
  * @see      https://github.com/inphinit/framework/blob/master/src/Inphinit/Routing/Route.php
  */
 class Teeny
@@ -200,28 +200,26 @@ class Teeny
         $getParams = '#\\\\[<](.*?)(\\\\:(' . implode('|', array_keys($patterns)) . ')|)\\\\[>]#';
 
         foreach ($this->paramRoutes as $path => $routes) {
-            if (strpos($path, '<') !== false) {
-                $path = preg_replace($getParams, '(?<$1><$3>)', preg_quote($path));
-                $path = str_replace('<>)', '.*?)', $path);
+            $path = preg_replace($getParams, '(?<$1><$3>)', preg_quote($path));
+            $path = str_replace('<>)', '.*?)', $path);
 
-                foreach ($patterns as $pattern => $regex) {
-                    $path = str_replace('<' . $pattern . '>)', $regex . ')', $path);
+            foreach ($patterns as $pattern => $regex) {
+                $path = str_replace('<' . $pattern . '>)', $regex . ')', $path);
+            }
+
+            if (preg_match('#^' . $path . '$#', $pathinfo, $params)) {
+                $code = 200;
+
+                if (isset($routes[$method])) {
+                    $callback = $routes[$method];
+                } elseif (isset($routes['ANY'])) {
+                    $callback = $routes['ANY'];
+                } else {
+                    $code = 405;
+                    $callback = null;
                 }
 
-                if (preg_match('#^' . $path . '$#', $pathinfo, $params)) {
-                    $code = 200;
-
-                    if (isset($routes[$method])) {
-                        $callback = $routes[$method];
-                    } elseif (isset($routes['ANY'])) {
-                        $callback = $routes['ANY'];
-                    } else {
-                        $code = 405;
-                        $callback = null;
-                    }
-
-                    return $this->dispatch($callback, $code, $params);
-                }
+                return $this->dispatch($callback, $code, $params);
             }
         }
 
