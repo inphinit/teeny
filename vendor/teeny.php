@@ -5,7 +5,7 @@ namespace Inphinit;
  * Based on Inphinit\Routing\Route class
  *
  * @author   Guilherme Nascimento <brcontainer@yahoo.com.br>
- * @version  0.2.5
+ * @version  0.2.6
  * @see      https://github.com/inphinit/framework/blob/master/src/Inphinit/Routing/Route.php
  */
 class Teeny
@@ -173,7 +173,9 @@ class Teeny
             }
         }
 
-        $this->dispatch($callback, $code, null);
+        if ($code !== 0) {
+            $this->dispatch($callback, $code, null);
+        }
 
         return true;
     }
@@ -219,7 +221,9 @@ class Teeny
                     $callback = null;
                 }
 
-                return $this->dispatch($callback, $code, $params);
+                $this->dispatch($callback, $code, $params);
+
+                return 0;
             }
         }
 
