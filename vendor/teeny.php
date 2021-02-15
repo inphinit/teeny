@@ -5,7 +5,7 @@ namespace Inphinit;
  * Based on Inphinit\Routing\Route class
  *
  * @author   Guilherme Nascimento <brcontainer@yahoo.com.br>
- * @version  0.2.7
+ * @version  0.2.8
  * @see      https://github.com/inphinit/framework/blob/master/src/Inphinit/Routing/Route.php
  */
 class Teeny
@@ -201,60 +201,56 @@ class Teeny
         $getParams = '#[<]([A-Za-z]\w+)(\:(' . implode('|', array_keys($patterns)) . ')|)[>]#';
 
         $limit = 20;
-        $indexRoutes = 0;
+        $total = count($this->paramRoutes);
 
-        foreach ($this->paramRoutes as $rePath => $currentCallbacks) {
-            if ($indexRoutes % $limit === 0) {
-                $slice = array_slice($this->paramRoutes, $indexRoutes, $limit);
+        for ($indexRoutes = 0; $indexRoutes < $total; $indexRoutes += $limit) {
+            $slice = array_slice($this->paramRoutes, $indexRoutes, $limit);
 
-                $j = 0;
-                $callbacks = array();
+            $j = 0;
+            $callbacks = array();
 
-                foreach ($slice as $regexPath => &$param) {
-                    $callbacks[] = $param;
-                    $param = '#route_' . (++$j) . '>' . $regexPath;
-                }
-
-                $groupRegex = implode(')|(', $slice);
-
-                $groupRegex = preg_replace($getParams, '(?<$1><$3>)', $groupRegex);
-                $groupRegex = str_replace('<>)', '.*?)', $groupRegex);
-
-                foreach ($patterns as $pattern => $regex) {
-                    $groupRegex = str_replace('<' . $pattern . '>)', $regex . ')', $groupRegex);
-                }
-
-                $groupRegex = str_replace('#route_', '?<route_', $groupRegex);
-
-                if (preg_match('#^((?J)(' . $groupRegex . '))$#', $pathinfo, $params)) {
-                    foreach ($params as $index => $value) {
-                        if ($value === '' || is_int($index)) {
-                            unset($params[$index]);
-                        } else if (strpos($index, 'route_') === 0) {
-                            $callbacks = $callbacks[substr($index, 6) - 1];
-
-                            unset($params[$index]);
-                        }
-                    }
-
-                    $code = 200;
-
-                    if (isset($callbacks[$method])) {
-                        $callback = $callbacks[$method];
-                    } elseif (isset($callbacks['ANY'])) {
-                        $callback = $callbacks['ANY'];
-                    } else {
-                        $code = 405;
-                        $callback = null;
-                    }
-
-                    $this->dispatch($callback, $code, $params);
-
-                    return 0;
-                }
+            foreach ($slice as $regexPath => &$param) {
+                $callbacks[] = $param;
+                $param = '#route_' . (++$j) . '>' . $regexPath;
             }
 
-            ++$indexRoutes;
+            $groupRegex = implode(')|(', $slice);
+
+            $groupRegex = preg_replace($getParams, '(?<$1><$3>)', $groupRegex);
+            $groupRegex = str_replace('<>)', '.*?)', $groupRegex);
+
+            foreach ($patterns as $pattern => $regex) {
+                $groupRegex = str_replace('<' . $pattern . '>)', $regex . ')', $groupRegex);
+            }
+
+            $groupRegex = str_replace('#route_', '?<route_', $groupRegex);
+
+            if (preg_match('#^((?J)(' . $groupRegex . '))$#', $pathinfo, $params)) {
+                foreach ($params as $index => $value) {
+                    if ($value === '' || is_int($index)) {
+                        unset($params[$index]);
+                    } else if (strpos($index, 'route_') === 0) {
+                        $callbacks = $callbacks[substr($index, 6) - 1];
+
+                        unset($params[$index]);
+                    }
+                }
+
+                $code = 200;
+
+                if (isset($callbacks[$method])) {
+                    $callback = $callbacks[$method];
+                } elseif (isset($callbacks['ANY'])) {
+                    $callback = $callbacks['ANY'];
+                } else {
+                    $code = 405;
+                    $callback = null;
+                }
+
+                $this->dispatch($callback, $code, $params);
+
+                return 0;
+            }
         }
 
         return 404;
