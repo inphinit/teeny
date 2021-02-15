@@ -7,10 +7,11 @@
     <li><a href="./about"><code>/about</code></a></li>
     <li><a href="./memory"><code>/memory</code></a></li>
     <li><a href="./foo/bar"><code>/foo/bar</code></a></li>
-    <li><a href="./foo/test/test1"><code>/foo/&lt;foo>/&lt;bar></code></a></li>
-    <li><a href="./foo/test-test2"><code>/foo/&lt;foo>-&lt;bar></code></a></li>
+    <li><a href="./cat"><code>/cat</code></a></li>
+    <li><a href="./foo/value1/value2"><code>/foo/&lt;foo>/&lt;bar></code></a></li>
+    <li><a href="./foo/value1-value2"><code>/foo/&lt;foo>-<bar></code></a></li>
     <li><a href="./article/foo/777"><code>/article/&lt;name>/&lt;id></code></a></li>
-    <li><a href="./blog/baz-8000"><code>/blog/&lt;name>-&lt;id:num></code></a></li>
+    <li><a href="./blog/baz-8000"><code>/blog/&lt;name>-<id:num></code></a></li>
     <li><a href="./test/7000"><code>/test/&lt;id:num></code></a></li>
     <li><a href="./test/foo/abcdef"><code>/test/foo/&lt;name:alpha></code></a></li>
     <li><a href="./test/bar/f0f0f0"><code>/test/bar/&lt;barcode:alnum></code></a></li>
@@ -29,6 +30,8 @@
 
     <li><a href="./nospace/a-b-c/ção"><code>/noslash/&lt;name:nospace></code></a></li>
     <li><a href="./nospace/a%20b+c"><code>/noslash/&lt;name:nospace> (invalid example)</code></a></li>
+
+    <li><a href="./custom/A00001"><code>/custom/&lt;myexample:example></code></a></li>
 </ul>
 
 <hr>

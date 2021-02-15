@@ -1,12 +1,17 @@
 <?php
 require_once 'vendor/teeny.php';
 
-//Uncomment next line for composer projects
+// Uncomment next line for composer projects
 # require_once 'vendor/autoload.php';
 
 $app = new \Inphinit\Teeny;
 
-$app->action('GET', '/', 'examples/home.php');
+// Uncomment next lines for "stress test" (fake paths)
+# for ($i = 0; $i < 300; ++$i) {
+#     $app->action('GET', '/foooz/<a' . $i . '>', 'examples/home.php' . $i);
+# }
+
+$app->action('ANY', '/', 'examples/home.php');
 
 $app->action('GET', '/include', 'examples/foo.php');
 
