@@ -6,8 +6,8 @@
     <li><a href="./include"><code>/include</code></a></li>
     <li><a href="./about"><code>/about</code></a></li>
     <li><a href="./memory"><code>/memory</code></a></li>
-    <li><a href="./foo/bar"><code>/foo/bar</code></a></li>
-    <li><a href="./cat"><code>/cat</code></a></li>
+    <li><a href="./foo/bar"><code>/foo/bar</code> ("405 Method Not Allowed" example)</a></li>
+    <li><a href="./cat"><code>/cat</code> ("405 Method Not Allowed" example)</a></li>
     <li><a href="./foo/value1/value2"><code>/foo/&lt;foo>/&lt;bar></code></a></li>
     <li><a href="./foo/value1-value2"><code>/foo/&lt;foo>-<bar></code></a></li>
     <li><a href="./article/foo/777"><code>/article/&lt;name>/&lt;id></code></a></li>
