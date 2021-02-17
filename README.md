@@ -1,3 +1,21 @@
+
+<div align="center">
+    <a href="https://github.com/inphinit/teeny/">
+        <img src="assets/php.png" width="160" alt="Teeny route system for PHP">
+    </a>
+    <a href="https://github.com/inphinit/teeny.js/">
+    <img src="assets/js.png" width="160" alt="Teeny route system for JavaScript (Node.js)">
+    </a>
+    <a href="https://github.com/inphinit/teeny.go/">
+    <img src="assets/go.png" width="160" alt="Teeny route system for Golang">
+    </a>
+    <a href="https://github.com/inphinit/teeny.py/">
+    <img src="assets/py.png" width="160" alt="Teeny route system for Python">
+    </a>
+</div>
+
+## Teeny for PHP
+
 Teeny is a micro-route system that is really micro, supports **PHP 5.3** to **PHP 8**, is extremely simple and ready to use.
 
 ## Install using composer
