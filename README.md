@@ -1,16 +1,15 @@
-
 <div align="center">
     <a href="https://github.com/inphinit/teeny/">
-        <img src="assets/php.png" width="160" alt="Teeny route system for PHP">
+        <img src="./badges/php.png" width="160" alt="Teeny route system for PHP">
     </a>
     <a href="https://github.com/inphinit/teeny.js/">
-    <img src="assets/js.png" width="160" alt="Teeny route system for JavaScript (Node.js)">
+    <img src="./badges/js.png" width="160" alt="Teeny route system for JavaScript (Node.js)">
     </a>
     <a href="https://github.com/inphinit/teeny.go/">
-    <img src="assets/go.png" width="160" alt="Teeny route system for Golang">
+    <img src="./badges/go.png" width="160" alt="Teeny route system for Golang">
     </a>
     <a href="https://github.com/inphinit/teeny.py/">
-    <img src="assets/py.png" width="160" alt="Teeny route system for Python">
+    <img src="./badges/py.png" width="160" alt="Teeny route system for Python">
     </a>
 </div>
 
