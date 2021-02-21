@@ -1,5 +1,5 @@
 <?php
-require_once 'vendor/teeny.php';
+require_once 'vendor/Teeny.php';
 
 // Uncomment next line for composer projects
 # require_once 'vendor/autoload.php';

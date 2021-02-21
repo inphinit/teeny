@@ -5,7 +5,6 @@ namespace Inphinit;
  * Based on Inphinit\Routing\Route class
  *
  * @author   Guilherme Nascimento <brcontainer@yahoo.com.br>
- * @version  0.2.8
  * @see      https://github.com/inphinit/framework/blob/master/src/Inphinit/Routing/Route.php
  */
 class Teeny
@@ -198,7 +197,7 @@ class Teeny
     {
         $pathinfo = $this->pathinfo;
         $patterns = $this->paramPatterns;
-        $getParams = '#[<]([A-Za-z]\w+)(\:(' . implode('|', array_keys($patterns)) . ')|)[>]#';
+        $getParams = '#\\\\[<]([A-Za-z]\\w+)(\\\\:(' . implode('|', array_keys($patterns)) . ')|)\\\\[>]#';
 
         $limit = 20;
         $total = count($this->paramRoutes);
@@ -211,7 +210,7 @@ class Teeny
 
             foreach ($slice as $regexPath => &$param) {
                 $callbacks[] = $param;
-                $param = '#route_' . (++$j) . '>' . $regexPath;
+                $param = '#route_' . (++$j) . '>' . preg_quote($regexPath);
             }
 
             $groupRegex = implode(')|(', $slice);
