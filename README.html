@@ -118,23 +118,28 @@ body .markdown-body
   padding: 0;
 }
 
-.markdown-body .codehilitetable {
+.markdown-body .codehilitetable,
+.markdown-body .highlighttable {
   border: 0;
   border-spacing: 0;
 }
 
-.markdown-body .codehilitetable tr {
+.markdown-body .codehilitetable tr,
+.markdown-body .highlighttable {
   border: 0;
 }
 
 .markdown-body .codehilitetable pre,
-.markdown-body .codehilitetable div.codehilite {
+.markdown-body .codehilitetable div.codehilite,
+.markdown-body .highlighttable pre,
+.markdown-body .highlighttable div.highlight {
   margin: 0;
 }
 
 .markdown-body .linenos,
 .markdown-body .code,
-.markdown-body .codehilitetable td {
+.markdown-body .codehilitetable td,
+.markdown-body .highlighttable td {
   border: 0;
   padding: 0;
 }
@@ -517,11 +522,13 @@ body .markdown-body
   border: 0;
 }
 
-.markdown-body .codehilite {
+.markdown-body .codehilite,
+.markdown-body .highlight {
   margin-bottom: 16px;
 }
 
 .markdown-body .codehilite pre,
+.markdown-body .highlight pre,
 .markdown-body pre {
   padding: 16px;
   overflow: auto;
@@ -531,7 +538,8 @@ body .markdown-body
   border-radius: 3px;
 }
 
-.markdown-body .codehilite pre {
+.markdown-body .codehilite pre,
+.markdown-body .highlight pre {
   margin-bottom: 0;
   word-break: normal;
 }
@@ -993,80 +1001,80 @@ body .markdown-body
   }
 }
 </style><style>/*GitHub*/
-.codehilite {background-color:#fff;color:#333333;}
-.codehilite .hll {background-color:#ffffcc;}
-.codehilite .c{color:#999988;font-style:italic}
-.codehilite .err{color:#a61717;background-color:#e3d2d2}
-.codehilite .k{font-weight:bold}
-.codehilite .o{font-weight:bold}
-.codehilite .cm{color:#999988;font-style:italic}
-.codehilite .cp{color:#999999;font-weight:bold}
-.codehilite .c1{color:#999988;font-style:italic}
-.codehilite .cs{color:#999999;font-weight:bold;font-style:italic}
-.codehilite .gd{color:#000000;background-color:#ffdddd}
-.codehilite .ge{font-style:italic}
-.codehilite .gr{color:#aa0000}
-.codehilite .gh{color:#999999}
-.codehilite .gi{color:#000000;background-color:#ddffdd}
-.codehilite .go{color:#888888}
-.codehilite .gp{color:#555555}
-.codehilite .gs{font-weight:bold}
-.codehilite .gu{color:#800080;font-weight:bold}
-.codehilite .gt{color:#aa0000}
-.codehilite .kc{font-weight:bold}
-.codehilite .kd{font-weight:bold}
-.codehilite .kn{font-weight:bold}
-.codehilite .kp{font-weight:bold}
-.codehilite .kr{font-weight:bold}
-.codehilite .kt{color:#445588;font-weight:bold}
-.codehilite .m{color:#009999}
-.codehilite .s{color:#dd1144}
-.codehilite .n{color:#333333}
-.codehilite .na{color:teal}
-.codehilite .nb{color:#0086b3}
-.codehilite .nc{color:#445588;font-weight:bold}
-.codehilite .no{color:teal}
-.codehilite .ni{color:purple}
-.codehilite .ne{color:#990000;font-weight:bold}
-.codehilite .nf{color:#990000;font-weight:bold}
-.codehilite .nn{color:#555555}
-.codehilite .nt{color:navy}
-.codehilite .nv{color:teal}
-.codehilite .ow{font-weight:bold}
-.codehilite .w{color:#bbbbbb}
-.codehilite .mf{color:#009999}
-.codehilite .mh{color:#009999}
-.codehilite .mi{color:#009999}
-.codehilite .mo{color:#009999}
-.codehilite .sb{color:#dd1144}
-.codehilite .sc{color:#dd1144}
-.codehilite .sd{color:#dd1144}
-.codehilite .s2{color:#dd1144}
-.codehilite .se{color:#dd1144}
-.codehilite .sh{color:#dd1144}
-.codehilite .si{color:#dd1144}
-.codehilite .sx{color:#dd1144}
-.codehilite .sr{color:#009926}
-.codehilite .s1{color:#dd1144}
-.codehilite .ss{color:#990073}
-.codehilite .bp{color:#999999}
-.codehilite .vc{color:teal}
-.codehilite .vg{color:teal}
-.codehilite .vi{color:teal}
-.codehilite .il{color:#009999}
-.codehilite .gc{color:#999;background-color:#EAF2F5}
+.highlight {background-color:#fff;color:#333333;}
+.highlight .hll {background-color:#ffffcc;}
+.highlight .c{color:#999988;font-style:italic}
+.highlight .err{color:#a61717;background-color:#e3d2d2}
+.highlight .k{font-weight:bold}
+.highlight .o{font-weight:bold}
+.highlight .cm{color:#999988;font-style:italic}
+.highlight .cp{color:#999999;font-weight:bold}
+.highlight .c1{color:#999988;font-style:italic}
+.highlight .cs{color:#999999;font-weight:bold;font-style:italic}
+.highlight .gd{color:#000000;background-color:#ffdddd}
+.highlight .ge{font-style:italic}
+.highlight .gr{color:#aa0000}
+.highlight .gh{color:#999999}
+.highlight .gi{color:#000000;background-color:#ddffdd}
+.highlight .go{color:#888888}
+.highlight .gp{color:#555555}
+.highlight .gs{font-weight:bold}
+.highlight .gu{color:#800080;font-weight:bold}
+.highlight .gt{color:#aa0000}
+.highlight .kc{font-weight:bold}
+.highlight .kd{font-weight:bold}
+.highlight .kn{font-weight:bold}
+.highlight .kp{font-weight:bold}
+.highlight .kr{font-weight:bold}
+.highlight .kt{color:#445588;font-weight:bold}
+.highlight .m{color:#009999}
+.highlight .s{color:#dd1144}
+.highlight .n{color:#333333}
+.highlight .na{color:teal}
+.highlight .nb{color:#0086b3}
+.highlight .nc{color:#445588;font-weight:bold}
+.highlight .no{color:teal}
+.highlight .ni{color:purple}
+.highlight .ne{color:#990000;font-weight:bold}
+.highlight .nf{color:#990000;font-weight:bold}
+.highlight .nn{color:#555555}
+.highlight .nt{color:navy}
+.highlight .nv{color:teal}
+.highlight .ow{font-weight:bold}
+.highlight .w{color:#bbbbbb}
+.highlight .mf{color:#009999}
+.highlight .mh{color:#009999}
+.highlight .mi{color:#009999}
+.highlight .mo{color:#009999}
+.highlight .sb{color:#dd1144}
+.highlight .sc{color:#dd1144}
+.highlight .sd{color:#dd1144}
+.highlight .s2{color:#dd1144}
+.highlight .se{color:#dd1144}
+.highlight .sh{color:#dd1144}
+.highlight .si{color:#dd1144}
+.highlight .sx{color:#dd1144}
+.highlight .sr{color:#009926}
+.highlight .s1{color:#dd1144}
+.highlight .ss{color:#990073}
+.highlight .bp{color:#999999}
+.highlight .vc{color:teal}
+.highlight .vg{color:teal}
+.highlight .vi{color:teal}
+.highlight .il{color:#009999}
+.highlight .gc{color:#999;background-color:#EAF2F5}
 </style><title>README</title></head><body><article class="markdown-body"><div align="center">
     <a href="https://github.com/inphinit/teeny/">
-        <img src="./assets/php.png" width="160" alt="Teeny route system for PHP">
+        <img src="/C:/Users/new_g/Documents/GitHub/brcontainer/teeny/badges/php.png" width="160" alt="Teeny route system for PHP">
     </a>
     <a href="https://github.com/inphinit/teeny.js/">
-    <img src="./assets/js.png" width="160" alt="Teeny route system for JavaScript (Node.js)">
+    <img src="/C:/Users/new_g/Documents/GitHub/brcontainer/teeny/badges/javascript.png" width="160" alt="Teeny route system for JavaScript (Node.js)">
     </a>
     <a href="https://github.com/inphinit/teeny.go/">
-    <img src="./assets/go.png" width="160" alt="Teeny route system for Golang">
+    <img src="/C:/Users/new_g/Documents/GitHub/brcontainer/teeny/badges/golang.png" width="160" alt="Teeny route system for Golang">
     </a>
     <a href="https://github.com/inphinit/teeny.py/">
-    <img src="./assets/py.png" width="160" alt="Teeny route system for Python">
+    <img src="/C:/Users/new_g/Documents/GitHub/brcontainer/teeny/badges/python.png" width="160" alt="Teeny route system for Python">
     </a>
 </div>
 
@@ -1074,11 +1082,11 @@ body .markdown-body
 <p>Teeny is a micro-route system that is really micro, supports <strong>PHP 5.3</strong> to <strong>PHP 8</strong>, is extremely simple and ready to use.</p>
 <h2 id="install-using-composer">Install using composer<a class="headerlink" href="#install-using-composer" title="Permanent link"></a></h2>
 <p>For create your project use:</p>
-<div class="codehilite"><pre>composer create-project inphinit/teeny &lt;project name&gt;
+<div class="highlight"><pre>composer create-project inphinit/teeny &lt;project name&gt;
 </pre></div>
 
 <p>Replace <code>&lt;project name&gt;</code> by your project name, for exemple, if want create your project with &ldquo;blog&rdquo; name (folder name), use:</p>
-<div class="codehilite"><pre>composer create-project inphinit/teeny blog
+<div class="highlight"><pre>composer create-project inphinit/teeny blog
 </pre></div>
 
 <h2 id="download-without-composer">Download without composer<a class="headerlink" href="#download-without-composer" title="Permanent link"></a></h2>
@@ -1123,49 +1131,49 @@ body .markdown-body
 </table>
 <h2 id="add-and-remove-routes">Add and remove routes<a class="headerlink" href="#add-and-remove-routes" title="Permanent link"></a></h2>
 <p>For create a new route in <code>index.php</code> put like this:</p>
-<div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/myroute&#39;, function () {</span>
+<div class="highlight"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/myroute&#39;, function () {</span>
 <span class="x">    echo &#39;Test!&#39;;</span>
 <span class="x">});</span>
 </pre></div>
 
 <p>You can use <code>return</code>:</p>
-<div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/myroute&#39;, function () {</span>
+<div class="highlight"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/myroute&#39;, function () {</span>
 <span class="x">    return &#39;Test!&#39;;</span>
 <span class="x">});</span>
 </pre></div>
 
 <p>For remove a route use <code>null</code> value, like this:</p>
-<div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/myroute&#39;, null);</span>
+<div class="highlight"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/myroute&#39;, null);</span>
 </pre></div>
 
 <h2 id="route-include-file">Route include file<a class="headerlink" href="#route-include-file" title="Permanent link"></a></h2>
 <p>For include a file uses like this:</p>
-<div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/myroute&#39;, &#39;foo/bar/test.php&#39;);</span>
+<div class="highlight"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/myroute&#39;, &#39;foo/bar/test.php&#39;);</span>
 </pre></div>
 
 <p>If <code>foo/bar/test.php</code> not found in project will display the following error:</p>
-<div class="codehilite"><pre>Warning: require(foo/bar/test.php): failed to open stream: No such file or directory in /home/user/blog/vendor/teeny.php on line 156
+<div class="highlight"><pre>Warning: require(foo/bar/test.php): failed to open stream: No such file or directory in /home/user/blog/vendor/teeny.php on line 156
 
 Fatal error: require(): Failed opening required &#39;foo/bar/test.php&#39; (include_path=&#39;.&#39;) /home/user/blog/vendor/teeny.php on line 156
 </pre></div>
 
 <h2 id="http-status">HTTP status<a class="headerlink" href="#http-status" title="Permanent link"></a></h2>
 <p>For retrieve HTTP status from SAPI (Apache, Ngnix, IIS) or previously defined in the script itself use like this:</p>
-<div class="codehilite"><pre><span class="x">$var = $app-&gt;status();</span>
+<div class="highlight"><pre><span class="x">$var = $app-&gt;status();</span>
 </pre></div>
 
 <p>For retrieve into a route use like this:</p>
-<div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/myroute&#39;, function () use ($app) {</span>
+<div class="highlight"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/myroute&#39;, function () use ($app) {</span>
 <span class="x">    echo &#39;HTTP status: &#39;, $app-&gt;status();</span>
 <span class="x">});</span>
 </pre></div>
 
 <p>For set a new HTTP status use like this (eg.: emit 404 Not Found):</p>
-<div class="codehilite"><pre><span class="x">$app-&gt;status(404);</span>
+<div class="highlight"><pre><span class="x">$app-&gt;status(404);</span>
 </pre></div>
 
 <p>For set into route use like this (a example with condition/if):</p>
-<div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/report&#39;, function () use ($app) {</span>
+<div class="highlight"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/report&#39;, function () use ($app) {</span>
 <span class="x">    $file = &#39;data/foo.csv&#39;;</span>
 
 <span class="x">    if (is_file($file)) {</span>
@@ -1181,20 +1189,20 @@ Fatal error: require(): Failed opening required &#39;foo/bar/test.php&#39; (incl
 
 <h2 id="named-params-in-route">Named params in route<a class="headerlink" href="#named-params-in-route" title="Permanent link"></a></h2>
 <p>You can use params like this:</p>
-<div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/user/&lt;user&gt;&#39;, function ($params) {</span>
+<div class="highlight"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/user/&lt;user&gt;&#39;, function ($params) {</span>
 <span class="x">    var_dump($params);</span>
 <span class="x">});</span>
 </pre></div>
 
 <p>If access a URL like this <code>http://mywebsite/user/mary</code> returns:</p>
-<div class="codehilite"><pre>array(2) {
+<div class="highlight"><pre>array(2) {
   [&quot;user&quot;]=&gt;
   string(3) &quot;mary&quot;
 }
 </pre></div>
 
 <p>Another example:</p>
-<div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/article/&lt;name&gt;-&lt;id&gt;&#39;, function ($params) use ($app) {</span>
+<div class="highlight"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/article/&lt;name&gt;-&lt;id&gt;&#39;, function ($params) use ($app) {</span>
 <span class="x">    // Only ID numerics are valids</span>
 <span class="x">    if (ctype_digit($params[&#39;id&#39;])) {</span>
 <span class="x">        echo &#39;Article ID: &#39;, $params[&#39;id&#39;], &#39;&lt;br&gt;&#39;;</span>
@@ -1208,13 +1216,13 @@ Fatal error: require(): Failed opening required &#39;foo/bar/test.php&#39; (incl
 </pre></div>
 
 <p>If access a URL like this <code>http://mywebsite/article/mary-1000</code> returns:</p>
-<div class="codehilite"><pre>Article ID: mary
+<div class="highlight"><pre>Article ID: mary
 Article name: 1000
 </pre></div>
 
 <h2 id="types-of-params-named-in-routes">Types of params named in routes<a class="headerlink" href="#types-of-params-named-in-routes" title="Permanent link"></a></h2>
 <p>An example, only numeric id are valids:</p>
-<div class="codehilite"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/article/&lt;name&gt;-&lt;id:num&gt;&#39;, function ($params) {</span>
+<div class="highlight"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/article/&lt;name&gt;-&lt;id:num&gt;&#39;, function ($params) {</span>
 <span class="x">    echo &#39;Article ID: &#39;, $params[&#39;id&#39;], &#39;&lt;br&gt;&#39;;</span>
 <span class="x">    echo &#39;Article name: &#39;, $params[&#39;name&#39;];</span>
 <span class="x">});</span>
@@ -1272,7 +1280,7 @@ Article name: 1000
 </tbody>
 </table>
 <p>For add new patterns use like this <code>Teeny::setPattern()</code>, examples:</p>
-<div class="codehilite"><pre><span class="x">$app-&gt;setPattern(&#39;example&#39;, &#39;[A-Z]\d+&#39;);</span>
+<div class="highlight"><pre><span class="x">$app-&gt;setPattern(&#39;example&#39;, &#39;[A-Z]\d+&#39;);</span>
 
 <span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/custom/&lt;myexample:example&gt;&#39;, function ($params) use ($app) {</span>
 <span class="x">    echo &#39;&lt;h1&gt;custom pattern&lt;/h1&gt;&#39;;</span>

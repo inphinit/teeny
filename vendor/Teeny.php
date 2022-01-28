@@ -66,7 +66,7 @@ class Teeny
     public function status($code = null)
     {
         if (function_exists('http_response_code')) {
-            return http_response_code($code);
+            return $code ? http_response_code($code) : http_response_code();
         }
 
         if ($code === null && preg_match('#/RESERVED\.TEENY-(\d{3})\.html#', $_SERVER['PHP_SELF'], $match)) {

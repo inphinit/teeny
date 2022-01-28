@@ -13,8 +13,13 @@ set CURRENT_PATH=%CURRENT_PATH:~0,-1%
 :: Router path
 set ROUTER="%CURRENT_PATH%\index.php"
 
-:: Start built in server
-%PHP_BIN% -S "%HOST_HOST%:%HOST_PORT%" -c %PHP_INI% -t "%CURRENT_PATH%" %ROUTER%
-
-:: Prevent close if PHP failed to start
-pause
+if not exist %PHP_BIN% (
+    echo ERROR: %PHP_BIN% not found
+    pause
+) else if not exist %PHP_INI% (
+    echo ERROR: %PHP_INI% not found
+    pause
+) else (
+    :: Start built in server
+    %PHP_BIN% -S "%HOST_HOST%:%HOST_PORT%" -c %PHP_INI% -t "%CURRENT_PATH%" %ROUTER% || pause
+)
