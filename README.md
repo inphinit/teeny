@@ -13,7 +13,7 @@
     </a>
 </div>
 
-## Teeny for PHP
+# Teeny route system for PHP
 
 Teeny is a micro-route system that is really micro, supports **PHP 5.3** to **PHP 8**, is extremely simple and ready to use.
 
@@ -37,7 +37,51 @@ If is not using `composer` try direct download from https://github.com/inphinit/
 
 ## Execute
 
-Copy for Apache ou Nginx folder and configure Vhost in Apache or execute direct from folder
+Copy for Apache or Nginx folder and configure Vhost in Apache or configure [`try_files`](https://nginx.org/en/docs/http/ngx_http_core_module.html#try_files) in Nginx.
+
+You can use [built-in server](https://www.php.net/manual/en/features.commandline.webserver.php) to facilitate the development, Teeny provides the relative static files, which will facilitate the use, example of use (navigate to project folder using `cd` command):
+
+```
+php -S localhost:8080 index.php
+```
+
+You can edit the server.bat (Windows) or server (Linux or macOS) files to make it easier to start the project with a simple command
+
+### Windows (server.bat file)
+
+Configure the `server.bat` variables according to your environment:
+
+```
+set PHP_BIN="C:\php\php.exe"
+set PHP_INI="C:\php\php.ini"
+set HOST_HOST=localhost
+set HOST_PORT=9000
+```
+
+Once configured, you can navigate to the project folder and run the command that will start built-in server, see an example:
+
+```
+cd c:\projets\blog
+server
+```
+
+### Linux and macOS (server file)
+
+Configure the `./server` variables according to your environment:
+
+```
+PHP_BIN="/usr/bin/php"
+PHP_INI="/etc/php5/cli/php.ini"
+HOST_HOST=localhost
+HOST_PORT=9000
+```
+
+Once configured, you can navigate to the project folder and run the command that will start built-in server, see an example:
+
+```
+cd ~/projets/blog
+./server
+```
 
 ## API
 

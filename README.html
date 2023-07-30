@@ -1,7 +1,5 @@
 <!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>body {
   max-width: 980px;
-  border: 1px solid #ddd;
-  outline: 1300px solid #fff;
   margin: 16px auto;
 }
 
@@ -899,6 +897,10 @@ body .markdown-body
   vertical-align: middle;
 }
 
+.markdown-body diagram-div, .markdown-body div.uml-sequence-diagram, .markdown-body, div.uml-flowchart {
+  overflow: auto;
+}
+
 /* Media */
 @media only screen and (min-width: 480px) {
   .markdown-body {
@@ -1078,7 +1080,7 @@ body .markdown-body
     </a>
 </div>
 
-<h2 id="teeny-for-php">Teeny for PHP<a class="headerlink" href="#teeny-for-php" title="Permanent link"></a></h2>
+<h1 id="teeny-route-system-for-php">Teeny route system for PHP<a class="headerlink" href="#teeny-route-system-for-php" title="Permanent link"></a></h1>
 <p>Teeny is a micro-route system that is really micro, supports <strong>PHP 5.3</strong> to <strong>PHP 8</strong>, is extremely simple and ready to use.</p>
 <h2 id="install-using-composer">Install using composer<a class="headerlink" href="#install-using-composer" title="Permanent link"></a></h2>
 <p>For create your project use:</p>
@@ -1092,7 +1094,7 @@ body .markdown-body
 <h2 id="download-without-composer">Download without composer<a class="headerlink" href="#download-without-composer" title="Permanent link"></a></h2>
 <p>If is not using <code>composer</code> try direct download from <a href="https://github.com/inphinit/teeny/releases">https://github.com/inphinit/teeny/releases</a></p>
 <h2 id="execute">Execute<a class="headerlink" href="#execute" title="Permanent link"></a></h2>
-<p>Copy for Apache ou Nginx folder and configure Vhost in Apache or execute direct from folder</p>
+<p>Copy for Apache or Nginx folder and configure Vhost in Apache or configure [`try_files`](https://nginx.org/en/docs/http/ngx_http_core_module.html#try_files) in Nginx</p>
 <h2 id="api">API<a class="headerlink" href="#api" title="Permanent link"></a></h2>
 <p>Methods from <code>Teeny</code> class</p>
 <table>

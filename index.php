@@ -116,5 +116,4 @@ $app->handlerCodes(array(403, 404, 405), function ($code) {
     echo 'Custom page error ', $code;
 });
 
-//Remove true in argument if use Apache, Ngnix or IIS
 return $app->exec();
