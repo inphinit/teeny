@@ -9,13 +9,12 @@ namespace Inphinit;
  */
 class Teeny
 {
+    private $code = 200;
+    private $pathinfo;
+
     private $codes = array();
     private $routes = array();
     private $paramRoutes = array();
-    private $paramCallbacks = array();
-
-    private $code = 200;
-    private $pathinfo;
 
     private $hasParams = false;
     private $paramPatterns = array(
@@ -265,7 +264,7 @@ class Teeny
                 echo $callback($code);
             }
         } elseif (is_string($callback) && strpos($callback, '.') !== false) {
-            TeenyLoader($this, $callback);
+            TeenyLoader($this, $callback, $params);
         } elseif ($params !== null) {
             echo $callback($params);
         } else {
@@ -289,11 +288,12 @@ class Teeny
 /**
  * Require file
  *
- * @param Teeny $app Teeny (or custom) context
- * @param string $callback file required
+ * @param Teeny $app        Teeny (or custom) context
+ * @param string $callback  File required
+ * @param array $params     Params from route pattern
  * @return mixed
  */
-function TeenyLoader(Teeny $app, $callback)
+function TeenyLoader(Teeny $app, $callback, $params)
 {
     return require $callback;
 }
