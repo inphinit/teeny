@@ -4,6 +4,7 @@
 
 <ul>
     <li><a href="./include"><code>/include</code></a></li>
+    <li><a href="./info"><code>/info</code></a></li>
     <li><a href="./about"><code>/about</code></a></li>
     <li><a href="./memory"><code>/memory</code></a></li>
     <li><a href="./foo/bar"><code>/foo/bar</code> ("405 Method Not Allowed" example)</a></li>

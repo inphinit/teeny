@@ -15,6 +15,8 @@ $app->action('ANY', '/', 'examples/home.php');
 
 $app->action('GET', '/include', 'examples/foo.php');
 
+$app->action('GET', '/info', 'phpinfo');
+
 $app->action('GET', '/about', function () {
     echo 'Teeny is very small and easy route system';
 });

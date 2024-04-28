@@ -90,9 +90,9 @@ class Teeny
     /**
      * Register a callback or script for a route
      *
-     * @param string|array     $methods
-     * @param string           $path
-     * @param string|\Closure  $callback
+     * @param string|array    $methods
+     * @param string          $path
+     * @param string|\Closure $callback
      * @return void
      */
     public function action($methods, $path, $callback)
@@ -113,18 +113,18 @@ class Teeny
 
         if (is_array($methods)) {
             foreach ($methods as $method) {
-                $routes[$path][strtoupper(trim($method))] = $callback;
+                $routes[$path][strtoupper($method)] = $callback;
             }
         } else {
-            $routes[$path][strtoupper(trim($methods))] = $callback;
+            $routes[$path][strtoupper($methods)] = $callback;
         }
     }
 
     /**
      * Handler HTTP status code
      *
-     * @param array     $codes
-     * @param callable  $callback
+     * @param array    $codes
+     * @param callable $callback
      * @return void
      */
     public function handlerCodes(array $codes, $callback)
@@ -288,9 +288,9 @@ class Teeny
 /**
  * Require file
  *
- * @param Teeny $app        Teeny (or custom) context
- * @param string $callback  File required
- * @param array $params     Params from route pattern
+ * @param Teeny  $app      Teeny (or custom) context
+ * @param string $callback File required
+ * @param array  $params   Params from route pattern
  * @return mixed
  */
 function TeenyLoader(Teeny $app, $callback, $params)

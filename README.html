@@ -500,8 +500,11 @@ body .markdown-body
   padding-bottom: 0.2em;
   margin: 0;
   font-size: 85%;
-  background-color: rgba(0,0,0,0.04);
   border-radius: 3px;
+}
+
+.markdown-body code:not(.highlight):not(.codehilite), .markdown-body samp {
+  background-color: rgba(0,0,0,0.04);
 }
 
 .markdown-body code:before,
@@ -532,8 +535,16 @@ body .markdown-body
   overflow: auto;
   font-size: 85%;
   line-height: 1.45;
-  background-color: #f7f7f7;
+}
+
+.markdown-body .codehilite,
+.markdown-body .highlight,
+.markdown-body pre {
   border-radius: 3px;
+}
+
+.markdown-body :not(.highlight) > pre {
+  background-color: #f7f7f7;
 }
 
 .markdown-body .codehilite pre,
@@ -1003,7 +1014,7 @@ body .markdown-body
   }
 }
 </style><style>/*GitHub*/
-.highlight {background-color:#fff;color:#333333;}
+.highlight {background-color:#f7f7f7;color:#333333;}
 .highlight .hll {background-color:#ffffcc;}
 .highlight .c{color:#999988;font-style:italic}
 .highlight .err{color:#a61717;background-color:#e3d2d2}
@@ -1067,16 +1078,16 @@ body .markdown-body
 .highlight .gc{color:#999;background-color:#EAF2F5}
 </style><title>README</title></head><body><article class="markdown-body"><div align="center">
     <a href="https://github.com/inphinit/teeny/">
-        <img src="./badges/php.png" width="160" alt="Teeny route system for PHP">
+        <img src="/C:/DATA/projects/teeny/badges/php.png" width="160" alt="Teeny route system for PHP">
     </a>
     <a href="https://github.com/inphinit/teeny.js/">
-    <img src="./badges/javascript.png" width="160" alt="Teeny route system for JavaScript (Node.js)">
+    <img src="/C:/DATA/projects/teeny/badges/javascript.png" width="160" alt="Teeny route system for JavaScript (Node.js)">
     </a>
     <a href="https://github.com/inphinit/teeny.go/">
-    <img src="./badges/golang.png" width="160" alt="Teeny route system for Golang">
+    <img src="/C:/DATA/projects/teeny/badges/golang.png" width="160" alt="Teeny route system for Golang">
     </a>
     <a href="https://github.com/inphinit/teeny.py/">
-    <img src="./badges/python.png" width="160" alt="Teeny route system for Python">
+    <img src="/C:/DATA/projects/teeny/badges/python.png" width="160" alt="Teeny route system for Python">
     </a>
 </div>
 
@@ -1094,7 +1105,38 @@ body .markdown-body
 <h2 id="download-without-composer">Download without composer<a class="headerlink" href="#download-without-composer" title="Permanent link"></a></h2>
 <p>If is not using <code>composer</code> try direct download from <a href="https://github.com/inphinit/teeny/releases">https://github.com/inphinit/teeny/releases</a></p>
 <h2 id="execute">Execute<a class="headerlink" href="#execute" title="Permanent link"></a></h2>
-<p>Copy for Apache or Nginx folder and configure Vhost in Apache or configure [`try_files`](https://nginx.org/en/docs/http/ngx_http_core_module.html#try_files) in Nginx</p>
+<p>Copy for Apache or Nginx folder and configure Vhost in Apache or configure <a href="https://nginx.org/en/docs/http/ngx_http_core_module.html#try_files"><code>try_files</code></a> in Nginx.</p>
+<p>You can use <a href="https://www.php.net/manual/en/features.commandline.webserver.php">built-in server</a> to facilitate the development, Teeny provides the relative static files, which will facilitate the use, example of use (navigate to project folder using <code>cd</code> command):</p>
+<div class="highlight"><pre>php -S localhost:8080 index.php
+</pre></div>
+
+<p>You can edit the server.bat (Windows) or server (Linux or macOS) files to make it easier to start the project with a simple command</p>
+<h3 id="windows-serverbat-file">Windows (server.bat file)<a class="headerlink" href="#windows-serverbat-file" title="Permanent link"></a></h3>
+<p>Configure the <code>server.bat</code> variables according to your environment:</p>
+<div class="highlight"><pre>set PHP_BIN=&quot;C:\php\php.exe&quot;
+set PHP_INI=&quot;C:\php\php.ini&quot;
+set HOST_HOST=localhost
+set HOST_PORT=9000
+</pre></div>
+
+<p>Once configured, you can navigate to the project folder and run the command that will start built-in server, see an example:</p>
+<div class="highlight"><pre>cd c:\projets\blog
+server
+</pre></div>
+
+<h3 id="linux-and-macos-server-file">Linux and macOS (server file)<a class="headerlink" href="#linux-and-macos-server-file" title="Permanent link"></a></h3>
+<p>Configure the <code>./server</code> variables according to your environment:</p>
+<div class="highlight"><pre>PHP_BIN=&quot;/usr/bin/php&quot;
+PHP_INI=&quot;/etc/php5/cli/php.ini&quot;
+HOST_HOST=localhost
+HOST_PORT=9000
+</pre></div>
+
+<p>Once configured, you can navigate to the project folder and run the command that will start built-in server, see an example:</p>
+<div class="highlight"><pre>cd ~/projets/blog
+./server
+</pre></div>
+
 <h2 id="api">API<a class="headerlink" href="#api" title="Permanent link"></a></h2>
 <p>Methods from <code>Teeny</code> class</p>
 <table>
