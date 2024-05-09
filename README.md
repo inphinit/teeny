@@ -35,13 +35,70 @@ composer create-project inphinit/teeny blog
 
 If is not using `composer` try direct download from https://github.com/inphinit/teeny/releases
 
-## Execute
+## Apache (`.htaccess`)
 
-Copy for Apache or Nginx folder and configure Vhost in Apache or configure [`try_files`](https://nginx.org/en/docs/http/ngx_http_core_module.html#try_files) in Nginx.
+The `.htaccess` will only need some adjustment if you are using it in a subfolder, you will need to change all `ErrorDocument`. See more details in https://httpd.apache.org/docs/2.4/custom-error.html.
+
+If the address is something like `https://<domain>/`, then do:
+
+```apacheconf
+ErrorDocument 401 /index.php/RESERVED.TEENY-401.html
+ErrorDocument 403 /index.php/RESERVED.TEENY-403.html
+ErrorDocument 500 /index.php/RESERVED.TEENY-500.html
+ErrorDocument 501 /index.php/RESERVED.TEENY-501.html
+```
+
+If the address is something like `https://<domain>/foo/`, then do:
+
+```apacheconf
+ErrorDocument 401 /foo/index.php/RESERVED.TEENY-401.html
+ErrorDocument 403 /foo/index.php/RESERVED.TEENY-403.html
+ErrorDocument 500 /foo/index.php/RESERVED.TEENY-500.html
+ErrorDocument 501 /foo/index.php/RESERVED.TEENY-501.html
+```
+
+If the address is something like `https://<domain>/foo/bar/`, then do:
+
+```apacheconf
+ErrorDocument 401 /foo/bar/index.php/RESERVED.TEENY-401.html
+ErrorDocument 403 /foo/bar/index.php/RESERVED.TEENY-403.html
+ErrorDocument 500 /foo/bar/index.php/RESERVED.TEENY-500.html
+ErrorDocument 501 /foo/bar/index.php/RESERVED.TEENY-501.html
+```
+
+## NGINX
+
+For NGINX you can use [`try_files`](https://nginx.org/en/docs/http/ngx_http_core_module.html#try_files) in Nginx. See a example:
+
+```
+location / {
+    root  /home/foo/bar/teeny;
+    index index.html index.htm index.php;
+
+    # Redirect page errors to route system
+    error_page 401 /index.php/RESERVED.TEENY-401.html;
+    error_page 403 /index.php/RESERVED.TEENY-403.html;
+    error_page 500 /index.php/RESERVED.TEENY-500.html;
+    error_page 501 /index.php/RESERVED.TEENY-501.html;
+
+    try_files /public/$uri /index.php?$query_string;
+
+    location ~ \.php$ {
+        include       fastcgi_params;
+        fastcgi_index index.php;
+        fastcgi_param INPHINIT_ROOT   $document_root
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_NAME     $fastcgi_script_name;
+        fastcgi_pass  127.0.0.1:9000; # Replace by your fastcgi
+    }
+}
+```
+
+## Built-in web server
 
 You can use [built-in server](https://www.php.net/manual/en/features.commandline.webserver.php) to facilitate the development, Teeny provides the relative static files, which will facilitate the use, example of use (navigate to project folder using `cd` command):
 
-```
+```sh
 php -S localhost:8080 index.php
 ```
 
@@ -51,16 +108,17 @@ You can edit the server.bat (Windows) or server (Linux or macOS) files to make i
 
 Configure the `server.bat` variables according to your environment:
 
-```
-set PHP_BIN="C:\php\php.exe"
-set PHP_INI="C:\php\php.ini"
+```bat
+set PHP_BIN=C:\php\php.exe
+set PHP_INI=C:\php\php.ini
+
 set HOST_HOST=localhost
 set HOST_PORT=9000
 ```
 
 Once configured, you can navigate to the project folder and run the command that will start built-in server, see an example:
 
-```
+```bat
 cd c:\projets\blog
 server
 ```
@@ -69,16 +127,17 @@ server
 
 Configure the `./server` variables according to your environment:
 
-```
-PHP_BIN="/usr/bin/php"
-PHP_INI="/etc/php5/cli/php.ini"
+```sh
+PHP_BIN=/usr/bin/php
+PHP_INI=/etc/php.ini
+
 HOST_HOST=localhost
 HOST_PORT=9000
 ```
 
 Once configured, you can navigate to the project folder and run the command that will start built-in server, see an example:
 
-```
+```sh
 cd ~/projets/blog
 ./server
 ```
@@ -114,7 +173,6 @@ $app->action('GET', '/myroute', function () {
     return 'Test!';
 });
 ```
-
 
 For remove a route use `null` value, like this:
 
@@ -169,6 +227,10 @@ $app->action('GET', '/report', function () use ($app) {
     if (is_file($file)) {
         header('Content-Type: text/csv');
         readfile($file);
+        /**
+         * Note: this is just an example, about sending a file,
+         * if possible use "X-Sendfile" or equivalent
+         */
     } else {
         $app->status(404);
 
@@ -189,7 +251,7 @@ $app->action('GET', '/user/<user>', function ($params) {
 
 If access a URL like this `http://mywebsite/user/mary` returns:
 
-```
+```php
 array(2) {
   ["user"]=>
   string(3) "mary"
@@ -219,7 +281,7 @@ Article ID: mary
 Article name: 1000
 ```
 
-## Types of params named in routes
+## Supported types for named parameters in routes
 
 An example, only numeric id are valids:
 
@@ -255,6 +317,97 @@ $app->action('GET', '/custom/<myexample:example>', function ($params) use ($app)
 ```
 
 And for access this route exemple use `http://mysite/test/A00001` or `http://mysite/test/C02`, start with upper-case letter and after width a integer number
+
+## Dealing with large files
+
+To work with large files you can choose to use the following server modules:
+
+Module | Server | Documentation
+--- | --- | ---
+`X-Sendfile` | Apache | https://tn123.org/mod_xsendfile/
+`X-Accel-Redirect` | NGINX | https://www.nginx.com/resources/wiki/start/topics/examples/x-accel/
+`X-LIGHTTPD-send-file` and `X-Sendfile2` | Lighttpd | https://redmine.lighttpd.net/projects/1/wiki/X-LIGHTTPD-send-file
+
+A simple implementation:
+
+```php
+$software = $_SERVER['SERVER_SOFTWARE'];
+$send = null;
+
+if (stripos($software, 'apache') !== false) {
+    $send = 'X-Sendfile';
+} else if (stripos($software, 'nginx') !== false) {
+    $send = 'X-Accel-Redirect';
+} else if (stripos($software, 'lighttpd') !== false) {
+    $send = 'X-LIGHTTPD-send-file';
+}
+
+$app->action('GET', '/download', function () use ($sendHeader) {
+    $file = '/protected/iso.img';
+
+    if ($send) {
+        header($send . ': ' . $file);
+    } else {
+        // fallback (this is just an example)
+        header('Content-Disposition: attachment; filename="iso.img"');
+
+        $length = 2097152;
+        $handle = fopen($file, 'r');
+
+        while (!feof($handle)) {
+            echo fgets($handle, $length);
+            flush();
+        }
+
+        fclose($handle);
+    }
+});
+```
+
+## Serving public files (and scripts)
+
+To serve public files (or scripts) you must add them to the public folder. The prefix `/public/*` will not be displayed in the URL, for example, if there is a file like `public/foobar.html`, then the user will simply access the address `https://<domain>/foobar.html`.
+
+Subfolders will also work, if it has a file like `public/foo/bar/baz/video.webm` then the user should go to `https://<domain>/foo/bar/baz/video.webm`.
+
+You can add PHP scripts, and they will be executed normally, if you have a script like `public/sample/helloworld.php`, just access `https://<domain>/sample/helloworld.php`
+
+If you want to make a blog available, such as Wordpress, you must also place it inside the folder, an example of structure:
+
+```
+├─── .htaccess
+├─── index.php
+├─── composer.json
+├─── vendor/
+└─── public/
+     ├─── helloword.html
+     └─── blog/
+          ├─── .htaccess
+          ├─── index.php
+          ├─── wp-activate.php
+          ├─── wp-blog-header.php
+          ├─── wp-comments-post.php
+          ├─── wp-config-sample.php
+          ├─── wp-config.php
+          ├─── wp-cron.php
+          ├─── wp-links-opml.php
+          ├─── wp-load.php
+          ├─── wp-login.php
+          ├─── wp-mail.php
+          ├─── wp-settings.php
+          ├─── wp-signup.php
+          ├─── wp-trackback.php
+          ├─── xmlrpc.php
+          ├─── wp-admin/
+          ├─── wp-content/
+          └─── wp-includes/
+```
+
+And then just access `https://<domain>/blog/`. Other samples:
+
+- `https://<domain>/blog/wp-admin/`
+- `https://<domain>/blog/2021/03/24/astronomy-messier-87-black-hole/`
+- `https://<domain>/blog/2023/04/17/researchers-discover-small-galaxy`
 
 ---
 

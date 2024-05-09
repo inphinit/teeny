@@ -12,11 +12,12 @@ ErrorDocument 501 /index.php/RESERVED.TEENY-501.html
 
 RewriteEngine On
 
-# Disable access to folder and redirect ./vendor/* path to "routes"
-RewriteRule ^(vendor/|vendor$) index.php [L]
+RewriteRule (^\.|/\.) index.php [L]
 
-# Check file or folders exists
-RewriteCond %{REQUEST_FILENAME} !-f
+# Redirect to public folder
+RewriteCond %{REQUEST_URI} !(^$|public/|index\.php(/|$))
+RewriteRule ^(.*)$ public/$1 [L]
 
 # Redirect all urls to index.php if no exits files
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [L]

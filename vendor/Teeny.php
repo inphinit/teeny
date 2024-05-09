@@ -4,13 +4,15 @@ namespace Inphinit;
 /**
  * Based on Inphinit\Routing\Route class
  *
- * @author   Guilherme Nascimento <brcontainer@yahoo.com.br>
- * @see      https://github.com/inphinit/framework/blob/master/src/Inphinit/Routing/Route.php
+ * @author Guilherme Nascimento <brcontainer@yahoo.com.br>
+ * @see    https://github.com/inphinit/framework/blob/master/src/Inphinit/Routing/Route.php
  */
 class Teeny
 {
+    private $builtIn = false;
+
     private $code = 200;
-    private $pathinfo;
+    private $pathInfo;
 
     private $codes = array();
     private $routes = array();
@@ -23,7 +25,7 @@ class Teeny
         'decimal' => '\d+\.\d+',
         'num' => '\d+',
         'noslash' => '[^\/]+',
-        'nospace' => '\S+',
+        'nospace' => '[^\/\s]+',
         'uuid' => '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}',
         'version' => '\d+\.\d+(\.\d+(-[\da-zA-Z]+(\.[\da-zA-Z]+)*(\+[\da-zA-Z]+(\.[\da-zA-Z]+)*)?)?)?'
     );
@@ -31,6 +33,16 @@ class Teeny
     public function __construct()
     {
         header_remove('X-Powered-By');
+
+        $this->builtIn = PHP_SAPI === 'cli-server';
+
+        $uri = urldecode(strtok($_SERVER['REQUEST_URI'], '?'));
+
+        if (!$this->builtIn) {
+            $uri = substr($uri, stripos($_SERVER['SCRIPT_NAME'], '/index.php'));
+        }
+
+        $this->pathInfo = $uri;
     }
 
     /**
@@ -40,20 +52,7 @@ class Teeny
      */
     public function path()
     {
-        if ($this->pathinfo === null) {
-            $requri = urldecode(strtok($_SERVER['REQUEST_URI'], '?'));
-            $sname = $_SERVER['SCRIPT_NAME'];
-            $sdir = dirname($sname);
-
-            if ($sdir !== '\\' && $sdir !== '/' && $requri !== $sname && $requri !== $sdir) {
-                $sdir = rtrim($sdir, '/');
-                $requri = substr($requri, strlen($sdir));
-            }
-
-            $this->pathinfo = $requri;
-        }
-
-        return $this->pathinfo;
+        return $this->pathInfo;
     }
 
     /**
@@ -72,7 +71,9 @@ class Teeny
             $this->code = (int) $match[1];
         }
 
-        if ($code === null || $this->code === $code) {
+        if ($code === null) {
+            return 200;
+        } elseif ($current === $code) {
             return $this->code;
         } elseif (headers_sent() || $code < 100 || $code > 599) {
             return false;
@@ -145,9 +146,9 @@ class Teeny
         $callback = null;
 
         if ($code === 200) {
-            $path = $this->path();
+            $path = $this->pathInfo;
 
-            if (PHP_SAPI === 'cli-server' && $this->builtinFile()) {
+            if ($this->builtIn && $this->fileInBuiltIn()) {
                 return false;
             }
 
@@ -171,7 +172,7 @@ class Teeny
         }
 
         if ($code !== 0) {
-            $this->dispatch($callback, $code, null);
+            $this->dispatch($callback, $code, array());
         }
 
         return true;
@@ -194,7 +195,7 @@ class Teeny
 
     private function params($method)
     {
-        $pathinfo = $this->pathinfo;
+        $pathinfo = $this->pathInfo;
         $patterns = $this->paramPatterns;
         $getParams = '#\\\\[<]([A-Za-z]\\w+)(\\\\:(' . implode('|', array_keys($patterns)) . ')|)\\\\[>]#';
 
@@ -265,23 +266,17 @@ class Teeny
             }
         } elseif (is_string($callback) && strpos($callback, '.') !== false) {
             TeenyLoader($this, $callback, $params);
-        } elseif ($params !== null) {
+        } else if ($params) {
             echo $callback($params);
         } else {
             echo $callback();
         }
     }
 
-    private function builtinFile()
+    private function fileInBuiltIn()
     {
-        $path = $this->pathinfo;
-
-        return (
-            $path !== '/' &&
-            strcasecmp($path, '/vendor') !== 0 &&
-            stripos($path, '/vendor/') !== 0 &&
-            is_file(__DIR__ . '/..' . $path)
-        );
+        $path = $this->pathInfo;
+        return $path !== '/' && is_file('public' . $path);
     }
 }
 

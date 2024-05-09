@@ -29,8 +29,9 @@
     <li><a href="./noslash/abc"><code>/noslash/&lt;name:noslash></code></a></li>
     <li><a href="./noslash/a/b/c"><code>/noslash/&lt;name:noslash> (invalid example)</code></a></li>
 
-    <li><a href="./nospace/a-b-c/ção"><code>/noslash/&lt;name:nospace></code></a></li>
-    <li><a href="./nospace/a%20b+c"><code>/noslash/&lt;name:nospace> (invalid example)</code></a></li>
+    <li><a href="./nospace/a-b-c-ção"><code>/noslash/&lt;name:nospace></code></a></li>
+    <li><a href="./nospace/a%20b-c-ção"><code>/noslash/&lt;name:nospace> (invalid example)</code></a></li>
+    <li><a href="./nospace/a+b-c-ção"><code>/noslash/&lt;name:nospace> (invalid example)</code></a></li>
 
     <li><a href="./custom/A00001"><code>/custom/&lt;myexample:example></code></a></li>
 </ul>

@@ -1078,16 +1078,16 @@ body .markdown-body
 .highlight .gc{color:#999;background-color:#EAF2F5}
 </style><title>README</title></head><body><article class="markdown-body"><div align="center">
     <a href="https://github.com/inphinit/teeny/">
-        <img src="/C:/DATA/projects/teeny/badges/php.png" width="160" alt="Teeny route system for PHP">
+        <img src="./badges/php.png" width="160" alt="Teeny route system for PHP">
     </a>
     <a href="https://github.com/inphinit/teeny.js/">
-    <img src="/C:/DATA/projects/teeny/badges/javascript.png" width="160" alt="Teeny route system for JavaScript (Node.js)">
+    <img src="./badges/javascript.png" width="160" alt="Teeny route system for JavaScript (Node.js)">
     </a>
     <a href="https://github.com/inphinit/teeny.go/">
-    <img src="/C:/DATA/projects/teeny/badges/golang.png" width="160" alt="Teeny route system for Golang">
+    <img src="./badges/golang.png" width="160" alt="Teeny route system for Golang">
     </a>
     <a href="https://github.com/inphinit/teeny.py/">
-    <img src="/C:/DATA/projects/teeny/badges/python.png" width="160" alt="Teeny route system for Python">
+    <img src="./badges/python.png" width="160" alt="Teeny route system for Python">
     </a>
 </div>
 
@@ -1104,8 +1104,55 @@ body .markdown-body
 
 <h2 id="download-without-composer">Download without composer<a class="headerlink" href="#download-without-composer" title="Permanent link"></a></h2>
 <p>If is not using <code>composer</code> try direct download from <a href="https://github.com/inphinit/teeny/releases">https://github.com/inphinit/teeny/releases</a></p>
-<h2 id="execute">Execute<a class="headerlink" href="#execute" title="Permanent link"></a></h2>
-<p>Copy for Apache or Nginx folder and configure Vhost in Apache or configure <a href="https://nginx.org/en/docs/http/ngx_http_core_module.html#try_files"><code>try_files</code></a> in Nginx.</p>
+<h2 id="apache-htaccess">Apache (<code>.htaccess</code>)<a class="headerlink" href="#apache-htaccess" title="Permanent link"></a></h2>
+<p>The <code>.htaccess</code> will only need some adjustment if you are using it in a subfolder, you will need to change all <code>ErrorDocument</code>. See more details in <a href="https://httpd.apache.org/docs/2.4/custom-error.html">https://httpd.apache.org/docs/2.4/custom-error.html</a>.</p>
+<p>If the address is something like <code>https://&lt;domain&gt;/</code>, then do:</p>
+<div class="highlight"><pre><span class="nb">ErrorDocument</span> <span class="m">401</span> <span class="sx">/index.php/RESERVED.TEENY-401.html</span>
+<span class="nb">ErrorDocument</span> <span class="m">403</span> <span class="sx">/index.php/RESERVED.TEENY-403.html</span>
+<span class="nb">ErrorDocument</span> <span class="m">500</span> <span class="sx">/index.php/RESERVED.TEENY-500.html</span>
+<span class="nb">ErrorDocument</span> <span class="m">501</span> <span class="sx">/index.php/RESERVED.TEENY-501.html</span>
+</pre></div>
+
+<p>If the address is something like <code>https://&lt;domain&gt;/foo/</code>, then do:</p>
+<div class="highlight"><pre><span class="nb">ErrorDocument</span> <span class="m">401</span> <span class="sx">/foo/index.php/RESERVED.TEENY-401.html</span>
+<span class="nb">ErrorDocument</span> <span class="m">403</span> <span class="sx">/foo/index.php/RESERVED.TEENY-403.html</span>
+<span class="nb">ErrorDocument</span> <span class="m">500</span> <span class="sx">/foo/index.php/RESERVED.TEENY-500.html</span>
+<span class="nb">ErrorDocument</span> <span class="m">501</span> <span class="sx">/foo/index.php/RESERVED.TEENY-501.html</span>
+</pre></div>
+
+<p>If the address is something like <code>https://&lt;domain&gt;/foo/bar/</code>, then do:</p>
+<div class="highlight"><pre><span class="nb">ErrorDocument</span> <span class="m">401</span> <span class="sx">/foo/bar/index.php/RESERVED.TEENY-401.html</span>
+<span class="nb">ErrorDocument</span> <span class="m">403</span> <span class="sx">/foo/bar/index.php/RESERVED.TEENY-403.html</span>
+<span class="nb">ErrorDocument</span> <span class="m">500</span> <span class="sx">/foo/bar/index.php/RESERVED.TEENY-500.html</span>
+<span class="nb">ErrorDocument</span> <span class="m">501</span> <span class="sx">/foo/bar/index.php/RESERVED.TEENY-501.html</span>
+</pre></div>
+
+<h2 id="nginx">NGINX<a class="headerlink" href="#nginx" title="Permanent link"></a></h2>
+<p>For NGINX you can use <a href="https://nginx.org/en/docs/http/ngx_http_core_module.html#try_files"><code>try_files</code></a> in Nginx. See a example:</p>
+<div class="highlight"><pre>location / {
+    root  /home/foo/bar/teeny;
+    index index.html index.htm index.php;
+
+    # Redirect page errors to route system
+    error_page 401 /index.php/RESERVED.TEENY-401.html;
+    error_page 403 /index.php/RESERVED.TEENY-403.html;
+    error_page 500 /index.php/RESERVED.TEENY-500.html;
+    error_page 501 /index.php/RESERVED.TEENY-501.html;
+
+    try_files /public/$uri /index.php?$query_string;
+
+    location ~ \.php$ {
+        include       fastcgi_params;
+        fastcgi_index index.php;
+        fastcgi_param INPHINIT_ROOT   $document_root
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_NAME     $fastcgi_script_name;
+        fastcgi_pass  127.0.0.1:9000; # Replace by your fastcgi
+    }
+}
+</pre></div>
+
+<h2 id="built-in-web-server">Built-in web server<a class="headerlink" href="#built-in-web-server" title="Permanent link"></a></h2>
 <p>You can use <a href="https://www.php.net/manual/en/features.commandline.webserver.php">built-in server</a> to facilitate the development, Teeny provides the relative static files, which will facilitate the use, example of use (navigate to project folder using <code>cd</code> command):</p>
 <div class="highlight"><pre>php -S localhost:8080 index.php
 </pre></div>
@@ -1113,27 +1160,29 @@ body .markdown-body
 <p>You can edit the server.bat (Windows) or server (Linux or macOS) files to make it easier to start the project with a simple command</p>
 <h3 id="windows-serverbat-file">Windows (server.bat file)<a class="headerlink" href="#windows-serverbat-file" title="Permanent link"></a></h3>
 <p>Configure the <code>server.bat</code> variables according to your environment:</p>
-<div class="highlight"><pre>set PHP_BIN=&quot;C:\php\php.exe&quot;
-set PHP_INI=&quot;C:\php\php.ini&quot;
-set HOST_HOST=localhost
-set HOST_PORT=9000
+<div class="highlight"><pre><span class="k">set</span> <span class="nv">PHP_BIN</span><span class="o">=</span>C:\php\php.exe
+<span class="k">set</span> <span class="nv">PHP_INI</span><span class="o">=</span>C:\php\php.ini
+
+<span class="k">set</span> <span class="nv">HOST_HOST</span><span class="o">=</span>localhost
+<span class="k">set</span> <span class="nv">HOST_PORT</span><span class="o">=</span><span class="m">9000</span>
 </pre></div>
 
 <p>Once configured, you can navigate to the project folder and run the command that will start built-in server, see an example:</p>
-<div class="highlight"><pre>cd c:\projets\blog
+<div class="highlight"><pre><span class="k">cd</span> c:\projets\blog
 server
 </pre></div>
 
 <h3 id="linux-and-macos-server-file">Linux and macOS (server file)<a class="headerlink" href="#linux-and-macos-server-file" title="Permanent link"></a></h3>
 <p>Configure the <code>./server</code> variables according to your environment:</p>
-<div class="highlight"><pre>PHP_BIN=&quot;/usr/bin/php&quot;
-PHP_INI=&quot;/etc/php5/cli/php.ini&quot;
-HOST_HOST=localhost
-HOST_PORT=9000
+<div class="highlight"><pre><span class="nv">PHP_BIN</span><span class="o">=</span>/usr/bin/php
+<span class="nv">PHP_INI</span><span class="o">=</span>/etc/php.ini
+
+<span class="nv">HOST_HOST</span><span class="o">=</span>localhost
+<span class="nv">HOST_PORT</span><span class="o">=</span>9000
 </pre></div>
 
 <p>Once configured, you can navigate to the project folder and run the command that will start built-in server, see an example:</p>
-<div class="highlight"><pre>cd ~/projets/blog
+<div class="highlight"><pre><span class="nb">cd</span> ~/projets/blog
 ./server
 </pre></div>
 
@@ -1223,6 +1272,10 @@ Fatal error: require(): Failed opening required &#39;foo/bar/test.php&#39; (incl
 <span class="x">    if (is_file($file)) {</span>
 <span class="x">        header(&#39;Content-Type: text/csv&#39;);</span>
 <span class="x">        readfile($file);</span>
+<span class="x">        /**</span>
+<span class="x">         * Note: this is just an example, about sending a file,</span>
+<span class="x">         * if possible use &quot;X-Sendfile&quot; or equivalent</span>
+<span class="x">         */</span>
 <span class="x">    } else {</span>
 <span class="x">        $app-&gt;status(404);</span>
 
@@ -1239,10 +1292,10 @@ Fatal error: require(): Failed opening required &#39;foo/bar/test.php&#39; (incl
 </pre></div>
 
 <p>If access a URL like this <code>http://mywebsite/user/mary</code> returns:</p>
-<div class="highlight"><pre>array(2) {
-  [&quot;user&quot;]=&gt;
-  string(3) &quot;mary&quot;
-}
+<div class="highlight"><pre><span class="x">array(2) {</span>
+<span class="x">  [&quot;user&quot;]=&gt;</span>
+<span class="x">  string(3) &quot;mary&quot;</span>
+<span class="x">}</span>
 </pre></div>
 
 <p>Another example:</p>
@@ -1264,7 +1317,7 @@ Fatal error: require(): Failed opening required &#39;foo/bar/test.php&#39; (incl
 Article name: 1000
 </pre></div>
 
-<h2 id="types-of-params-named-in-routes">Types of params named in routes<a class="headerlink" href="#types-of-params-named-in-routes" title="Permanent link"></a></h2>
+<h2 id="supported-types-for-named-parameters-in-routes">Supported types for named parameters in routes<a class="headerlink" href="#supported-types-for-named-parameters-in-routes" title="Permanent link"></a></h2>
 <p>An example, only numeric id are valids:</p>
 <div class="highlight"><pre><span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/article/&lt;name&gt;-&lt;id:num&gt;&#39;, function ($params) {</span>
 <span class="x">    echo &#39;Article ID: &#39;, $params[&#39;id&#39;], &#39;&lt;br&gt;&#39;;</span>
@@ -1335,5 +1388,106 @@ Article name: 1000
 </pre></div>
 
 <p>And for access this route exemple use <code>http://mysite/test/A00001</code> or <code>http://mysite/test/C02</code>, start with upper-case letter and after width a integer number</p>
+<h2 id="dealing-with-large-files">Dealing with large files<a class="headerlink" href="#dealing-with-large-files" title="Permanent link"></a></h2>
+<p>To work with large files you can choose to use the following server modules:</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Server</th>
+<th>Documentation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>X-Sendfile</code></td>
+<td>Apache</td>
+<td><a href="https://tn123.org/mod_xsendfile/">https://tn123.org/mod_xsendfile/</a></td>
+</tr>
+<tr>
+<td><code>X-Accel-Redirect</code></td>
+<td>NGINX</td>
+<td><a href="https://www.nginx.com/resources/wiki/start/topics/examples/x-accel/">https://www.nginx.com/resources/wiki/start/topics/examples/x-accel/</a></td>
+</tr>
+<tr>
+<td><code>X-LIGHTTPD-send-file</code> and <code>X-Sendfile2</code></td>
+<td>Lighttpd</td>
+<td><a href="https://redmine.lighttpd.net/projects/1/wiki/X-LIGHTTPD-send-file">https://redmine.lighttpd.net/projects/1/wiki/X-LIGHTTPD-send-file</a></td>
+</tr>
+</tbody>
+</table>
+<p>A simple implementation:</p>
+<div class="highlight"><pre><span class="x">$software = $_SERVER[&#39;SERVER_SOFTWARE&#39;];</span>
+<span class="x">$send = null;</span>
+
+<span class="x">if (stripos($software, &#39;apache&#39;) !== false) {</span>
+<span class="x">    $send = &#39;X-Sendfile&#39;;</span>
+<span class="x">} else if (stripos($software, &#39;nginx&#39;) !== false) {</span>
+<span class="x">    $send = &#39;X-Accel-Redirect&#39;;</span>
+<span class="x">} else if (stripos($software, &#39;lighttpd&#39;) !== false) {</span>
+<span class="x">    $send = &#39;X-LIGHTTPD-send-file&#39;;</span>
+<span class="x">}</span>
+
+<span class="x">$app-&gt;action(&#39;GET&#39;, &#39;/download&#39;, function () use ($sendHeader) {</span>
+<span class="x">    $file = &#39;/protected/iso.img&#39;;</span>
+
+<span class="x">    if ($send) {</span>
+<span class="x">        header($send . &#39;: &#39; . $file);</span>
+<span class="x">    } else {</span>
+<span class="x">        // fallback (this is just an example)</span>
+<span class="x">        header(&#39;Content-Disposition: attachment; filename=&quot;iso.img&quot;&#39;);</span>
+
+<span class="x">        $length = 2097152;</span>
+<span class="x">        $handle = fopen($file, &#39;r&#39;);</span>
+
+<span class="x">        while (!feof($handle)) {</span>
+<span class="x">            echo fgets($handle, $length);</span>
+<span class="x">            flush();</span>
+<span class="x">        }</span>
+
+<span class="x">        fclose($handle);</span>
+<span class="x">    }</span>
+<span class="x">});</span>
+</pre></div>
+
+<h2 id="serving-public-files-and-scripts">Serving public files (and scripts)<a class="headerlink" href="#serving-public-files-and-scripts" title="Permanent link"></a></h2>
+<p>To serve public files (or scripts) you must add them to the public folder. The prefix <code>/public/*</code> will not be displayed in the URL, for example, if there is a file like <code>public/foobar.html</code>, then the user will simply access the address <code>https://&lt;domain&gt;/foobar.html</code>.</p>
+<p>Subfolders will also work, if it has a file like <code>public/foo/bar/baz/video.webm</code> then the user should go to <code>https://&lt;domain&gt;/foo/bar/baz/video.webm</code>.</p>
+<p>You can add PHP scripts, and they will be executed normally, if you have a script like <code>public/sample/helloworld.php</code>, just access <code>https://&lt;domain&gt;/sample/helloworld.php</code></p>
+<p>If you want to make a blog available, such as Wordpress, you must also place it inside the folder, an example of structure:</p>
+<div class="highlight"><pre>├─── .htaccess
+├─── index.php
+├─── composer.json
+├─── vendor/
+└─── public/
+     ├─── helloword.html
+     └─── blog/
+          ├─── .htaccess
+          ├─── index.php
+          ├─── wp-activate.php
+          ├─── wp-blog-header.php
+          ├─── wp-comments-post.php
+          ├─── wp-config-sample.php
+          ├─── wp-config.php
+          ├─── wp-cron.php
+          ├─── wp-links-opml.php
+          ├─── wp-load.php
+          ├─── wp-login.php
+          ├─── wp-mail.php
+          ├─── wp-settings.php
+          ├─── wp-signup.php
+          ├─── wp-trackback.php
+          ├─── xmlrpc.php
+          ├─── wp-admin/
+          ├─── wp-content/
+          └─── wp-includes/
+</pre></div>
+
+<p>And then just access <code>https://&lt;domain&gt;/blog/</code>. Other samples:</p>
+<ul>
+<li><code>https://&lt;domain&gt;/blog/wp-admin/</code></li>
+<li><code>https://&lt;domain&gt;/blog/2021/03/24/astronomy-messier-87-black-hole/</code></li>
+<li><code>https://&lt;domain&gt;/blog/2023/04/17/researchers-discover-small-galaxy</code></li>
+</ul>
 <hr />
 <p>If you need more features you can experience the <strong>Inphinit PHP framework</strong>: <a href="https://inphinit.github.io">https://inphinit.github.io</a></p></article></body></html>
