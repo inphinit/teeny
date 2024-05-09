@@ -34,6 +34,9 @@
     <li><a href="./nospace/a+b-c-ção"><code>/noslash/&lt;name:nospace> (invalid example)</code></a></li>
 
     <li><a href="./custom/A00001"><code>/custom/&lt;myexample:example></code></a></li>
+
+    <li><a href="./sample.txt"><code>/sample.txt (public file)</code></a></li>
+    <li><a href="./helloworld.php"><code>/helloworld.php (public script)</code></a></li>
 </ul>
 
 <hr>
