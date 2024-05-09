@@ -407,7 +407,7 @@ And then just access `https://<domain>/blog/`. Other samples:
 
 - `https://<domain>/blog/wp-admin/`
 - `https://<domain>/blog/2021/03/24/astronomy-messier-87-black-hole/`
-- `https://<domain>/blog/2023/04/17/researchers-discover-small-galaxy`
+- `https://<domain>/blog/2023/04/17/researchers-discover-small-galaxy/`
 
 ---
 
