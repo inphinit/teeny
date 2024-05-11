@@ -89,10 +89,14 @@ location / {
         fastcgi_param INPHINIT_ROOT   $document_root
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param SCRIPT_NAME     $fastcgi_script_name;
-        fastcgi_pass  127.0.0.1:9000; # Replace by your fastcgi
+
+        # Replace by your FastCGI or FPM
+        fastcgi_pass  127.0.0.1:9000;
     }
 }
 ```
+
+> **Note:** For FPM use `fastcgi_pass unix:/var/run/php/php<version>-fpm.sock` (replace `<version>` by PHP version in your server)
 
 ## Built-in web server
 
@@ -347,20 +351,26 @@ $app->action('GET', '/download', function () use ($sendHeader) {
 
     if ($send) {
         header($send . ': ' . $file);
-    } else {
-        // fallback (this is just an example)
-        header('Content-Disposition: attachment; filename="iso.img"');
-
-        $length = 2097152;
-        $handle = fopen($file, 'r');
-
-        while (!feof($handle)) {
-            echo fgets($handle, $length);
-            flush();
-        }
-
-        fclose($handle);
+        return;
     }
+
+    if ($handle = fopen($file, 'r')) {
+        $app->status(500);
+        return 'Failed to read file';
+    }
+
+    // fallback (this is just an example)
+    $length = 2097152;
+
+    header('Content-Disposition: attachment; filename="iso.img"');
+    header('Content-Length: ' . filesize($file));
+
+    while (!feof($handle)) {
+        echo fgets($handle, $length);
+        flush();
+    }
+
+    fclose($handle);
 });
 ```
 

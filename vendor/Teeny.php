@@ -11,7 +11,7 @@ class Teeny
 {
     private $builtIn = false;
 
-    private $code = 200;
+    private $code;
     private $pathInfo;
 
     private $codes = array();
@@ -67,13 +67,15 @@ class Teeny
             return $code ? http_response_code($code) : http_response_code();
         }
 
-        if ($code === null && preg_match('#/RESERVED\.TEENY-(\d{3})\.html#', $_SERVER['PHP_SELF'], $match)) {
-            $this->code = (int) $match[1];
+        if ($this->code === null) {
+            if (preg_match('#/RESERVED\.TEENY-(\d{3})\.html#', $_SERVER['PHP_SELF'], $match)) {
+                $this->code = (int) $match[1];
+            } else {
+                $this->code = 200;
+            }
         }
 
-        if ($code === null) {
-            return 200;
-        } elseif ($current === $code) {
+        if ($code === null || $code === $this->code) {
             return $this->code;
         } elseif (headers_sent() || $code < 100 || $code > 599) {
             return false;
@@ -265,7 +267,7 @@ class Teeny
                 echo $callback($code);
             }
         } elseif (is_string($callback) && strpos($callback, '.') !== false) {
-            TeenyLoader($this, $callback, $params);
+            teeny_sandbox($this, $callback, $params);
         } else if ($params) {
             echo $callback($params);
         } else {
@@ -288,7 +290,7 @@ class Teeny
  * @param array  $params   Params from route pattern
  * @return mixed
  */
-function TeenyLoader(Teeny $app, $callback, $params)
+function teeny_sandbox(Teeny $app, $callback, $params)
 {
     return require $callback;
 }

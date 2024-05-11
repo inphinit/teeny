@@ -1147,11 +1147,16 @@ body .markdown-body
         fastcgi_param INPHINIT_ROOT   $document_root
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         fastcgi_param SCRIPT_NAME     $fastcgi_script_name;
-        fastcgi_pass  127.0.0.1:9000; # Replace by your fastcgi
+
+        # Replace by your FastCGI or FPM
+        fastcgi_pass  127.0.0.1:9000;
     }
 }
 </pre></div>
 
+<blockquote>
+<p><strong>Note:</strong> For FPM use <code>fastcgi_pass unix:/var/run/php/php&lt;version&gt;-fpm.sock</code> (replace <code>&lt;version&gt;</code> by PHP version in your server)</p>
+</blockquote>
 <h2 id="built-in-web-server">Built-in web server<a class="headerlink" href="#built-in-web-server" title="Permanent link"></a></h2>
 <p>You can use <a href="https://www.php.net/manual/en/features.commandline.webserver.php">built-in server</a> to facilitate the development, Teeny provides the relative static files, which will facilitate the use, example of use (navigate to project folder using <code>cd</code> command):</p>
 <div class="highlight"><pre>php -S localhost:8080 index.php
@@ -1433,20 +1438,26 @@ Article name: 1000
 
 <span class="x">    if ($send) {</span>
 <span class="x">        header($send . &#39;: &#39; . $file);</span>
-<span class="x">    } else {</span>
-<span class="x">        // fallback (this is just an example)</span>
-<span class="x">        header(&#39;Content-Disposition: attachment; filename=&quot;iso.img&quot;&#39;);</span>
-
-<span class="x">        $length = 2097152;</span>
-<span class="x">        $handle = fopen($file, &#39;r&#39;);</span>
-
-<span class="x">        while (!feof($handle)) {</span>
-<span class="x">            echo fgets($handle, $length);</span>
-<span class="x">            flush();</span>
-<span class="x">        }</span>
-
-<span class="x">        fclose($handle);</span>
+<span class="x">        return;</span>
 <span class="x">    }</span>
+
+<span class="x">    if ($handle = fopen($file, &#39;r&#39;)) {</span>
+<span class="x">        $app-&gt;status(500);</span>
+<span class="x">        return &#39;Failed to read file&#39;;</span>
+<span class="x">    }</span>
+
+<span class="x">    // fallback (this is just an example)</span>
+<span class="x">    $length = 2097152;</span>
+
+<span class="x">    header(&#39;Content-Disposition: attachment; filename=&quot;iso.img&quot;&#39;);</span>
+<span class="x">    header(&#39;Content-Length: &#39; . filesize($file));</span>
+
+<span class="x">    while (!feof($handle)) {</span>
+<span class="x">        echo fgets($handle, $length);</span>
+<span class="x">        flush();</span>
+<span class="x">    }</span>
+
+<span class="x">    fclose($handle);</span>
 <span class="x">});</span>
 </pre></div>
 
@@ -1487,7 +1498,7 @@ Article name: 1000
 <ul>
 <li><code>https://&lt;domain&gt;/blog/wp-admin/</code></li>
 <li><code>https://&lt;domain&gt;/blog/2021/03/24/astronomy-messier-87-black-hole/</code></li>
-<li><code>https://&lt;domain&gt;/blog/2023/04/17/researchers-discover-small-galaxy</code></li>
+<li><code>https://&lt;domain&gt;/blog/2023/04/17/researchers-discover-small-galaxy/</code></li>
 </ul>
 <hr />
 <p>If you need more features you can experience the <strong>Inphinit PHP framework</strong>: <a href="https://inphinit.github.io">https://inphinit.github.io</a></p></article></body></html>
