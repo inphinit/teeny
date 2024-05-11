@@ -148,12 +148,11 @@ class Teeny
         $callback = null;
 
         if ($code === 200) {
-            $path = $this->pathInfo;
-
             if ($this->builtIn && $this->fileInBuiltIn()) {
                 return false;
             }
 
+            $path = $this->pathInfo;
             $method = $_SERVER['REQUEST_METHOD'];
 
             if (isset($this->routes[$path])) {
