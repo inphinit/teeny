@@ -12,6 +12,7 @@ ErrorDocument 501 /index.php/RESERVED.TEENY-501.html
 
 RewriteEngine On
 
+# Ignore hidden files
 RewriteRule (^\.|/\.) index.php [L]
 
 # Redirect to public folder

@@ -278,7 +278,12 @@ class Teeny
     private function fileInBuiltIn()
     {
         $path = $this->pathInfo;
-        return $path !== '/' && is_file('public' . $path);
+        return (
+            $path !== '/' &&
+            strpos($path, '.') !== 0 &&
+            strpos($path, '/.') === false &&
+            is_file('public' . $path)
+        );
     }
 }
 

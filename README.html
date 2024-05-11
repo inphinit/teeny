@@ -1133,24 +1133,26 @@ body .markdown-body
     root  /home/foo/bar/teeny;
     index index.html index.htm index.php;
 
+    location ~ /\. {
+        return 404;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass  127.0.0.1:9000; # Replace by your FastCGI or FPM
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_NAME     $fastcgi_script_name;
+        include       fastcgi_params;
+    }
+
     # Redirect page errors to route system
     error_page 401 /index.php/RESERVED.TEENY-401.html;
     error_page 403 /index.php/RESERVED.TEENY-403.html;
+    error_page 404 /index.php/RESERVED.TEENY-404.html;
     error_page 500 /index.php/RESERVED.TEENY-500.html;
     error_page 501 /index.php/RESERVED.TEENY-501.html;
 
-    try_files /public/$uri /index.php?$query_string;
-
-    location ~ \.php$ {
-        include       fastcgi_params;
-        fastcgi_index index.php;
-        fastcgi_param INPHINIT_ROOT   $document_root
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param SCRIPT_NAME     $fastcgi_script_name;
-
-        # Replace by your FastCGI or FPM
-        fastcgi_pass  127.0.0.1:9000;
-    }
+    try_files /public/$uri /index.php;
 }
 </pre></div>
 
