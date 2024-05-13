@@ -217,7 +217,7 @@ class Teeny
             $groupRegex = implode(')|(', $slice);
 
             $groupRegex = preg_replace($getParams, '(?<$1><$3>)', $groupRegex);
-            $groupRegex = str_replace('<>)', '.*?)', $groupRegex);
+            $groupRegex = str_replace('<>)', '[^/]+)', $groupRegex);
 
             foreach ($patterns as $pattern => $regex) {
                 $groupRegex = str_replace('<' . $pattern . '>)', $regex . ')', $groupRegex);
