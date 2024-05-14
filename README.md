@@ -72,6 +72,8 @@ For NGINX you can use [`try_files`](https://nginx.org/en/docs/http/ngx_http_core
 
 ```
 location / {
+    root /home/foo/bar/teeny;
+
     # Redirect page errors to route system
     error_page 403 /index.php/RESERVED.TEENY-403.html;
     error_page 500 /index.php/RESERVED.TEENY-500.html;
