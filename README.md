@@ -72,29 +72,36 @@ For NGINX you can use [`try_files`](https://nginx.org/en/docs/http/ngx_http_core
 
 ```
 location / {
-    root  /home/foo/bar/teeny;
-    index index.html index.htm index.php;
-
-    location ~ /\. {
-        return 404;
-    }
-
-    location ~ \.php$ {
-        fastcgi_pass  127.0.0.1:9000; # Replace by your FastCGI or FPM
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param SCRIPT_NAME     $fastcgi_script_name;
-        include       fastcgi_params;
-    }
-
     # Redirect page errors to route system
-    error_page 401 /index.php/RESERVED.TEENY-401.html;
     error_page 403 /index.php/RESERVED.TEENY-403.html;
-    error_page 404 /index.php/RESERVED.TEENY-404.html;
     error_page 500 /index.php/RESERVED.TEENY-500.html;
     error_page 501 /index.php/RESERVED.TEENY-501.html;
 
-    try_files /public/$uri /index.php;
+    try_files /public$uri /index.php?$query_string;
+
+    location = / {
+        try_files $uri /index.php?$query_string;
+    }
+
+    location ~ /\. {
+        try_files /index.php$uri /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        # Replace by your FPM or FastCGI
+        fastcgi_pass 127.0.0.1:9000;
+
+        fastcgi_index index.php;
+        include fastcgi_params;
+
+        set $teeny_suffix "";
+
+        if ($uri != "/index.php") {
+            set $teeny_suffix "/public";
+        }
+
+        fastcgi_param SCRIPT_FILENAME $realpath_root$teeny_suffix$fastcgi_script_name;
+    }
 }
 ```
 
