@@ -89,13 +89,6 @@ function testCallback($params) {
     echo '</pre>';
 }
 
-$app->action('GET', '/noslash/<value:noslash>', function ($params) {
-    echo '<h1>noslash</h1>';
-    echo '<pre>';
-    print_r($params);
-    echo '</pre>';
-});
-
 $app->action('GET', '/nospace/<value:nospace>', function ($params) {
     echo '<h1>nospace</h1>';
     echo '<pre>';

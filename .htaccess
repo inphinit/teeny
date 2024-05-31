@@ -11,13 +11,18 @@ ErrorDocument 501 /index.php/RESERVED.TEENY-501.html
 
 RewriteEngine On
 
+# Handle Authorization Header
+# RewriteCond %{HTTP:Authorization} .
+# RewriteRule . - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
 # Ignore hidden files
 RewriteRule ^\.|/\. index.php [L]
 
 # Redirect to public folder
-RewriteCond %{REQUEST_URI} !(^$|public/|index\.php(/|$))
-RewriteRule ^(.*)$ public/$1
+RewriteCond %{REQUEST_URI} !(^$|/$|public/|index\.php(/|$))
+RewriteRule ^(.*)$ public/$1 [L]
 
 # Redirect all urls to index.php if no exits files
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [L]

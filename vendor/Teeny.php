@@ -24,9 +24,8 @@ class Teeny
         'alpha' => '[a-zA-Z]+',
         'decimal' => '\d+\.\d+',
         'num' => '\d+',
-        'noslash' => '[^/]+',
         'nospace' => '[^/\s]+',
-        'uuid' => '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}',
+        'uuid' => '[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}',
         'version' => '\d+\.\d+(\.\d+(-[\da-zA-Z]+(\.[\da-zA-Z]+)*(\+[\da-zA-Z]+(\.[\da-zA-Z]+)*)?)?)?'
     );
 
@@ -38,7 +37,7 @@ class Teeny
 
         $uri = urldecode(strtok($_SERVER['REQUEST_URI'], '?'));
 
-        if (!$this->builtIn) {
+        if ($this->builtIn === false) {
             $uri = substr($uri, stripos($_SERVER['SCRIPT_NAME'], '/index.php'));
         }
 

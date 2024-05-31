@@ -313,8 +313,7 @@ Type | Example | Description
 `alpha` | `$app->action('GET', '/foo/bar/<name:alpha>', ...);` | Only accepts parameters with alpha format and `$params` returns `array( name => ...)`
 `decimal` | `$app->action('GET', '/baz/<price:decimal>', ...);` | Only accepts parameters with decimal format and `$params` returns `array( price => ...)`
 `num` | `$app->action('GET', '/foo/<id:num>', ...);` | Only accepts parameters with integer format and `$params` returns `array( id => ...)`
-`noslash` | `$app->action('GET', '/foo/<noslash:noslash>', ...);` | Accpets any characters expcet slashs (`/`)
-`nospace` | `$app->action('GET', '/foo/<nospace:nospace>', ...);` | Accpets any characters expcet spaces, like white-spaces (`%20`), tabs (`%0A`) and others (see about `\S` in regex)
+`nospace` | `$app->action('GET', '/foo/<nospace:nospace>', ...);` | Accepts any characters expcet spaces, like white-spaces (`%20`), tabs (`%0A`) and others (see about `\S` in regex)
 `uuid` | `$app->action('GET', '/bar/<barcode:alnum>', ...);` | Only accepts parameters with uuid format and `$params` returns `array( barcode => ...)`
 `version` | `$app->action('GET', '/baz/<api:version>', ...);` | Only accepts parameters with [semversion (v2)](https://semver.org/spec/v2.0.0.html) format and `$params` returns `array( api => ...)`
 
