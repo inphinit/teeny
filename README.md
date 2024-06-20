@@ -42,7 +42,6 @@ The `.htaccess` will only need some adjustment if you are using it in a subfolde
 If the address is something like `https://<domain>/`, then do:
 
 ```apacheconf
-ErrorDocument 401 /index.php/RESERVED.TEENY-401.html
 ErrorDocument 403 /index.php/RESERVED.TEENY-403.html
 ErrorDocument 500 /index.php/RESERVED.TEENY-500.html
 ErrorDocument 501 /index.php/RESERVED.TEENY-501.html
@@ -51,7 +50,6 @@ ErrorDocument 501 /index.php/RESERVED.TEENY-501.html
 If the address is something like `https://<domain>/foo/`, then do:
 
 ```apacheconf
-ErrorDocument 401 /foo/index.php/RESERVED.TEENY-401.html
 ErrorDocument 403 /foo/index.php/RESERVED.TEENY-403.html
 ErrorDocument 500 /foo/index.php/RESERVED.TEENY-500.html
 ErrorDocument 501 /foo/index.php/RESERVED.TEENY-501.html
@@ -60,7 +58,6 @@ ErrorDocument 501 /foo/index.php/RESERVED.TEENY-501.html
 If the address is something like `https://<domain>/foo/bar/`, then do:
 
 ```apacheconf
-ErrorDocument 401 /foo/bar/index.php/RESERVED.TEENY-401.html
 ErrorDocument 403 /foo/bar/index.php/RESERVED.TEENY-403.html
 ErrorDocument 500 /foo/bar/index.php/RESERVED.TEENY-500.html
 ErrorDocument 501 /foo/bar/index.php/RESERVED.TEENY-501.html
@@ -167,7 +164,7 @@ Method | Description
 `Teeny::status([int $code]): int` | Get or set HTTP status
 `Teeny::action(mixed $methods, string $path, mixed $callback): void` | Add or remove or update a route, supports functions, closures and paths to PHP scripts
 `Teeny::handlerCodes(array $codes, mixed $callback): int` | Detect if SAPI or script change HTTP status
-`Teeny::setPattern(string $pattern, mixed $regex): void` | Add or remove pattern for custom routes, like `/foo/<variable1:pattern>`
+`Teeny::setPattern(string $pattern, mixed $regex): void` | Add or replace a pattern for custom routes, like `/foo/<variable1:pattern>`
 `Teeny::exec(): bool` | Execute defined route
 
 

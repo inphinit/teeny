@@ -22,9 +22,9 @@ class Teeny
     private $paramPatterns = array(
         'alnum' => '[\da-zA-Z]+',
         'alpha' => '[a-zA-Z]+',
-        'decimal' => '\d+\.\d+',
-        'num' => '\d+',
+        'decimal' => '(0|[1-9]\d*)\.\d+',
         'nospace' => '[^/\s]+',
+        'num' => '\d+',
         'uuid' => '[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}',
         'version' => '\d+\.\d+(\.\d+(-[\da-zA-Z]+(\.[\da-zA-Z]+)*(\+[\da-zA-Z]+(\.[\da-zA-Z]+)*)?)?)?'
     );
@@ -109,7 +109,7 @@ class Teeny
             $routes = &$this->routes;
         }
 
-        if (!isset($routes[$path])) {
+        if (isset($routes[$path]) === false) {
             $routes[$path] = array();
         }
 
@@ -144,6 +144,7 @@ class Teeny
     public function exec()
     {
         $code = $this->status();
+        $params = null;
         $callback = null;
 
         if ($code === 200) {
@@ -153,47 +154,54 @@ class Teeny
 
             $path = $this->pathInfo;
             $method = $_SERVER['REQUEST_METHOD'];
+            $routes = null;
 
             if (isset($this->routes[$path])) {
                 $routes = &$this->routes[$path];
-
-                if (isset($routes[$method])) {
-                    $callback = $routes[$method];
-                } elseif (isset($routes['ANY'])) {
-                    $callback = $routes['ANY'];
-                } else {
-                    $code = 405;
-                }
             } elseif ($this->hasParams) {
-                $code = $this->params($method);
+                $this->params($routes, $params);
+            }
+
+            if (isset($routes[$method])) {
+                $callback = $routes[$method];
+            } elseif (isset($routes['ANY'])) {
+                $callback = $routes['ANY'];
             } else {
-                $code = 404;
+                $code = $routes === null ? 404 : 405;
             }
         }
 
-        if ($code !== 0) {
-            $this->dispatch($callback, $code, array());
+        if ($code !== 200) {
+            $this->status($code);
+
+            if (isset($this->codes[$code])) {
+                $callback = $this->codes[$code];
+                echo $callback($code);
+            }
+        } elseif (is_string($callback) && strpos($callback, '.') !== false) {
+            teeny_sandbox($this, $callback, $params);
+        } else if ($params) {
+            echo $callback($params);
+        } else {
+            echo $callback();
         }
 
         return true;
     }
 
     /**
-     * Create or remove a pattern for URL slugs
+     * Create or replace a pattern for URL slugs
      *
-     * @param string|null $pattern Set pattern for URL slug params like this /foo/<var:pattern>
+     * @param string $name
+     * @param string $regex
      * @return void
      */
-    public function setPattern($pattern, $regex)
+    public function setPattern($name, $regex)
     {
-        if ($regex === null) {
-            unset($this->paramPatterns[preg_quote($pattern)]);
-        } else {
-            $this->paramPatterns[preg_quote($pattern)] = $regex;
-        }
+        $this->paramPatterns[preg_quote($name)] = $regex;
     }
 
-    private function params($method)
+    private function params(&$routes, &$params)
     {
         $pathinfo = $this->pathInfo;
         $patterns = $this->paramPatterns;
@@ -215,7 +223,7 @@ class Teeny
 
             $groupRegex = implode(')|(', $slice);
 
-            $groupRegex = preg_replace($getParams, '(?<$1><$3>)', $groupRegex);
+            $groupRegex = preg_replace($getParams, '(?P<$1><$3>)', $groupRegex);
             $groupRegex = str_replace('<>)', '[^/]+)', $groupRegex);
 
             foreach ($patterns as $pattern => $regex) {
@@ -229,47 +237,13 @@ class Teeny
                     if ($value === '' || is_int($index)) {
                         unset($params[$index]);
                     } else if (strpos($index, 'route_') === 0) {
-                        $callbacks = $callbacks[substr($index, 6) - 1];
-
+                        $routes = $callbacks[substr($index, 6) - 1];
                         unset($params[$index]);
                     }
                 }
 
-                $code = 200;
-
-                if (isset($callbacks[$method])) {
-                    $callback = $callbacks[$method];
-                } elseif (isset($callbacks['ANY'])) {
-                    $callback = $callbacks['ANY'];
-                } else {
-                    $code = 405;
-                    $callback = null;
-                }
-
-                $this->dispatch($callback, $code, $params);
-
-                return 0;
+                break;
             }
-        }
-
-        return 404;
-    }
-
-    private function dispatch($callback, $code, $params)
-    {
-        if ($code !== 200) {
-            $this->status($code);
-
-            if (isset($this->codes[$code])) {
-                $callback = $this->codes[$code];
-                echo $callback($code);
-            }
-        } elseif (is_string($callback) && strpos($callback, '.') !== false) {
-            teeny_sandbox($this, $callback, $params);
-        } else if ($params) {
-            echo $callback($params);
-        } else {
-            echo $callback();
         }
     }
 

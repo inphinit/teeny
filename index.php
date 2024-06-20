@@ -4,7 +4,7 @@ require_once 'vendor/Teeny.php';
 // Uncomment next line for composer projects
 # require_once 'vendor/autoload.php';
 
-$app = new \Inphinit\Teeny;
+$app = new Inphinit\Teeny;
 
 // Uncomment next lines for "stress test" (fake paths)
 # for ($i = 0; $i < 300; ++$i) {
