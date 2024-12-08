@@ -44,7 +44,6 @@ If the address is something like `https://<domain>/`, then do:
 ```apacheconf
 ErrorDocument 403 /index.php/RESERVED.TEENY-403.html
 ErrorDocument 500 /index.php/RESERVED.TEENY-500.html
-ErrorDocument 501 /index.php/RESERVED.TEENY-501.html
 ```
 
 If the address is something like `https://<domain>/foo/`, then do:
@@ -52,7 +51,6 @@ If the address is something like `https://<domain>/foo/`, then do:
 ```apacheconf
 ErrorDocument 403 /foo/index.php/RESERVED.TEENY-403.html
 ErrorDocument 500 /foo/index.php/RESERVED.TEENY-500.html
-ErrorDocument 501 /foo/index.php/RESERVED.TEENY-501.html
 ```
 
 If the address is something like `https://<domain>/foo/bar/`, then do:
@@ -60,7 +58,6 @@ If the address is something like `https://<domain>/foo/bar/`, then do:
 ```apacheconf
 ErrorDocument 403 /foo/bar/index.php/RESERVED.TEENY-403.html
 ErrorDocument 500 /foo/bar/index.php/RESERVED.TEENY-500.html
-ErrorDocument 501 /foo/bar/index.php/RESERVED.TEENY-501.html
 ```
 
 ## NGINX
@@ -74,7 +71,6 @@ location / {
     # Redirect page errors to route system
     error_page 403 /index.php/RESERVED.TEENY-403.html;
     error_page 500 /index.php/RESERVED.TEENY-500.html;
-    error_page 501 /index.php/RESERVED.TEENY-501.html;
 
     try_files /public$uri /index.php?$query_string;
 
@@ -111,10 +107,10 @@ location / {
 You can use [built-in server](https://www.php.net/manual/en/features.commandline.webserver.php) to facilitate the development, Teeny provides the relative static files, which will facilitate the use, example of use (navigate to project folder using `cd` command):
 
 ```sh
-php -S localhost:8080 index.php
+php -S localhost:8080 -t public index.php
 ```
 
-You can edit the server.bat (Windows) or server (Linux or macOS) files to make it easier to start the project with a simple command
+You can edit the `server.bat` (Windows) or `server` (Linux or macOS) files to make it easier to start the project with a simple command
 
 ### Windows (server.bat file)
 
@@ -124,7 +120,7 @@ Configure the `server.bat` variables according to your environment:
 set PHP_BIN=C:\php\php.exe
 set PHP_INI=C:\php\php.ini
 
-set HOST_HOST=localhost
+set HOST_ADDR=localhost
 set HOST_PORT=9000
 ```
 
@@ -143,7 +139,7 @@ Configure the `./server` variables according to your environment:
 PHP_BIN=/usr/bin/php
 PHP_INI=/etc/php.ini
 
-HOST_HOST=localhost
+HOST_ADDR=localhost
 HOST_PORT=9000
 ```
 
@@ -161,12 +157,11 @@ Methods from `Teeny` class
 Method | Description
 ---|---
 `Teeny::path(): string` | Get current path from URL (ignores subfolders if it is located in a subfolder on your webserver)
-`Teeny::status([int $code]): int` | Get or set HTTP status
-`Teeny::action(mixed $methods, string $path, mixed $callback): void` | Add or remove or update a route, supports functions, closures and paths to PHP scripts
-`Teeny::handlerCodes(array $codes, mixed $callback): int` | Detect if SAPI or script change HTTP status
-`Teeny::setPattern(string $pattern, mixed $regex): void` | Add or replace a pattern for custom routes, like `/foo/<variable1:pattern>`
-`Teeny::exec(): bool` | Execute defined route
-
+`Teeny::status([int $code]): int` | Get or set HTTP status code
+`Teeny::action($methods, string $path, mixed $callback): void` | Register a callback or script for a route
+`Teeny::setPattern(string $pattern, string $regex): void` | Add or replace a pattern for custom routes, like `/foo/<variable1:pattern>`
+`Teeny::handlerCodes(array $codes, mixed $callback): int` | Handler HTTP status code
+`Teeny::exec(): bool` | Execute application
 
 ## Add and remove routes
 
@@ -428,4 +423,4 @@ And then just access `https://<domain>/blog/`. Other samples:
 
 ---
 
-If you need more features you can experience the **Inphinit PHP framework**: https://inphinit.github.io
+If you need more features you can experience the **Inphinit PHP framework**: https://inphinit.github.io/

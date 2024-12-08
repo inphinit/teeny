@@ -1107,24 +1107,18 @@ body .markdown-body
 <h2 id="apache-htaccess">Apache (<code>.htaccess</code>)<a class="headerlink" href="#apache-htaccess" title="Permanent link"></a></h2>
 <p>The <code>.htaccess</code> will only need some adjustment if you are using it in a subfolder, you will need to change all <code>ErrorDocument</code>. See more details in <a href="https://httpd.apache.org/docs/2.4/custom-error.html">https://httpd.apache.org/docs/2.4/custom-error.html</a>.</p>
 <p>If the address is something like <code>https://&lt;domain&gt;/</code>, then do:</p>
-<div class="highlight"><pre><span class="nb">ErrorDocument</span> <span class="m">401</span> <span class="sx">/index.php/RESERVED.TEENY-401.html</span>
-<span class="nb">ErrorDocument</span> <span class="m">403</span> <span class="sx">/index.php/RESERVED.TEENY-403.html</span>
+<div class="highlight"><pre><span class="nb">ErrorDocument</span> <span class="m">403</span> <span class="sx">/index.php/RESERVED.TEENY-403.html</span>
 <span class="nb">ErrorDocument</span> <span class="m">500</span> <span class="sx">/index.php/RESERVED.TEENY-500.html</span>
-<span class="nb">ErrorDocument</span> <span class="m">501</span> <span class="sx">/index.php/RESERVED.TEENY-501.html</span>
 </pre></div>
 
 <p>If the address is something like <code>https://&lt;domain&gt;/foo/</code>, then do:</p>
-<div class="highlight"><pre><span class="nb">ErrorDocument</span> <span class="m">401</span> <span class="sx">/foo/index.php/RESERVED.TEENY-401.html</span>
-<span class="nb">ErrorDocument</span> <span class="m">403</span> <span class="sx">/foo/index.php/RESERVED.TEENY-403.html</span>
+<div class="highlight"><pre><span class="nb">ErrorDocument</span> <span class="m">403</span> <span class="sx">/foo/index.php/RESERVED.TEENY-403.html</span>
 <span class="nb">ErrorDocument</span> <span class="m">500</span> <span class="sx">/foo/index.php/RESERVED.TEENY-500.html</span>
-<span class="nb">ErrorDocument</span> <span class="m">501</span> <span class="sx">/foo/index.php/RESERVED.TEENY-501.html</span>
 </pre></div>
 
 <p>If the address is something like <code>https://&lt;domain&gt;/foo/bar/</code>, then do:</p>
-<div class="highlight"><pre><span class="nb">ErrorDocument</span> <span class="m">401</span> <span class="sx">/foo/bar/index.php/RESERVED.TEENY-401.html</span>
-<span class="nb">ErrorDocument</span> <span class="m">403</span> <span class="sx">/foo/bar/index.php/RESERVED.TEENY-403.html</span>
+<div class="highlight"><pre><span class="nb">ErrorDocument</span> <span class="m">403</span> <span class="sx">/foo/bar/index.php/RESERVED.TEENY-403.html</span>
 <span class="nb">ErrorDocument</span> <span class="m">500</span> <span class="sx">/foo/bar/index.php/RESERVED.TEENY-500.html</span>
-<span class="nb">ErrorDocument</span> <span class="m">501</span> <span class="sx">/foo/bar/index.php/RESERVED.TEENY-501.html</span>
 </pre></div>
 
 <h2 id="nginx">NGINX<a class="headerlink" href="#nginx" title="Permanent link"></a></h2>
@@ -1135,7 +1129,6 @@ body .markdown-body
     # Redirect page errors to route system
     error_page 403 /index.php/RESERVED.TEENY-403.html;
     error_page 500 /index.php/RESERVED.TEENY-500.html;
-    error_page 501 /index.php/RESERVED.TEENY-501.html;
 
     try_files /public$uri /index.php?$query_string;
 
@@ -1170,16 +1163,16 @@ body .markdown-body
 </blockquote>
 <h2 id="built-in-web-server">Built-in web server<a class="headerlink" href="#built-in-web-server" title="Permanent link"></a></h2>
 <p>You can use <a href="https://www.php.net/manual/en/features.commandline.webserver.php">built-in server</a> to facilitate the development, Teeny provides the relative static files, which will facilitate the use, example of use (navigate to project folder using <code>cd</code> command):</p>
-<div class="highlight"><pre>php -S localhost:8080 index.php
+<div class="highlight"><pre>php -S localhost:8080 -t public index.php
 </pre></div>
 
-<p>You can edit the server.bat (Windows) or server (Linux or macOS) files to make it easier to start the project with a simple command</p>
+<p>You can edit the <code>server.bat</code> (Windows) or <code>server</code> (Linux or macOS) files to make it easier to start the project with a simple command</p>
 <h3 id="windows-serverbat-file">Windows (server.bat file)<a class="headerlink" href="#windows-serverbat-file" title="Permanent link"></a></h3>
 <p>Configure the <code>server.bat</code> variables according to your environment:</p>
 <div class="highlight"><pre><span class="k">set</span> <span class="nv">PHP_BIN</span><span class="o">=</span>C:\php\php.exe
 <span class="k">set</span> <span class="nv">PHP_INI</span><span class="o">=</span>C:\php\php.ini
 
-<span class="k">set</span> <span class="nv">HOST_HOST</span><span class="o">=</span>localhost
+<span class="k">set</span> <span class="nv">HOST_ADDR</span><span class="o">=</span>localhost
 <span class="k">set</span> <span class="nv">HOST_PORT</span><span class="o">=</span><span class="m">9000</span>
 </pre></div>
 
@@ -1193,7 +1186,7 @@ server
 <div class="highlight"><pre><span class="nv">PHP_BIN</span><span class="o">=</span>/usr/bin/php
 <span class="nv">PHP_INI</span><span class="o">=</span>/etc/php.ini
 
-<span class="nv">HOST_HOST</span><span class="o">=</span>localhost
+<span class="nv">HOST_ADDR</span><span class="o">=</span>localhost
 <span class="nv">HOST_PORT</span><span class="o">=</span>9000
 </pre></div>
 
@@ -1217,24 +1210,28 @@ server
 <td>Get current path from URL (ignores subfolders if it is located in a subfolder on your webserver)</td>
 </tr>
 <tr>
+<td><code>Teeny::path() : string</code></td>
+<td>Get current path from application</td>
+</tr>
+<tr>
 <td><code>Teeny::status([int $code]): int</code></td>
-<td>Get or set HTTP status</td>
+<td>Get or set HTTP status code</td>
 </tr>
 <tr>
-<td><code>Teeny::action(mixed $methods, string $path, mixed $callback): void</code></td>
-<td>Add or remove or update a route, supports functions, closures and paths to PHP scripts</td>
+<td><code>Teeny::action($methods, string $path, mixed $callback): void</code></td>
+<td>Register a callback or script for a route</td>
 </tr>
 <tr>
-<td><code>Teeny::handlerCodes(array $codes, mixed $callback): int</code></td>
-<td>Detect if SAPI or script change HTTP status</td>
-</tr>
-<tr>
-<td><code>Teeny::setPattern(string $pattern, mixed $regex): void</code></td>
+<td><code>Teeny::setPattern(string $pattern, string $regex): void</code></td>
 <td>Add or replace a pattern for custom routes, like <code>/foo/&lt;variable1:pattern&gt;</code></td>
 </tr>
 <tr>
+<td><code>Teeny::handlerCodes(array $codes, mixed $callback): int</code></td>
+<td>Handler HTTP status code</td>
+</tr>
+<tr>
 <td><code>Teeny::exec(): bool</code></td>
-<td>Execute defined route</td>
+<td>Execute application</td>
 </tr>
 </tbody>
 </table>
@@ -1507,4 +1504,4 @@ Article name: 1000
 <li><code>https://&lt;domain&gt;/blog/2023/04/17/researchers-discover-small-galaxy/</code></li>
 </ul>
 <hr />
-<p>If you need more features you can experience the <strong>Inphinit PHP framework</strong>: <a href="https://inphinit.github.io">https://inphinit.github.io</a></p></article></body></html>
+<p>If you need more features you can experience the <strong>Inphinit PHP framework</strong>: <a href="https://inphinit.github.io/">https://inphinit.github.io/</a></p></article></body></html>

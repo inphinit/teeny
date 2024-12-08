@@ -1,12 +1,14 @@
 <?php
+/**
+ * Teeny
+ *
+ * Copyright (c) 2024 Guilherme Nascimento (brcontainer@yahoo.com.br)
+ *
+ * Released under the MIT license
+ */
+
 namespace Inphinit;
 
-/**
- * Based on Inphinit\Routing\Route class
- *
- * @author Guilherme Nascimento <brcontainer@yahoo.com.br>
- * @see    https://github.com/inphinit/framework/blob/master/src/Inphinit/Routing/Route.php
- */
 class Teeny
 {
     private $builtIn = false;
@@ -19,10 +21,11 @@ class Teeny
     private $paramRoutes = array();
 
     private $hasParams = false;
+    private $patternNames;
     private $paramPatterns = array(
         'alnum' => '[\da-zA-Z]+',
         'alpha' => '[a-zA-Z]+',
-        'decimal' => '(0|[1-9]\d*)\.\d+',
+        'decimal' => '(\d|[1-9]\d+)\.\d+',
         'nospace' => '[^/\s]+',
         'num' => '\d+',
         'uuid' => '[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}',
@@ -35,17 +38,19 @@ class Teeny
 
         $this->builtIn = PHP_SAPI === 'cli-server';
 
-        $uri = urldecode(strtok($_SERVER['REQUEST_URI'], '?'));
+        $uri = rawurldecode(strtok($_SERVER['REQUEST_URI'], '?'));
 
         if ($this->builtIn === false) {
-            $uri = substr($uri, stripos($_SERVER['SCRIPT_NAME'], '/index.php'));
+            $uri = substr($uri, strpos($_SERVER['SCRIPT_NAME'], '/index.php'));
         }
 
         $this->pathInfo = $uri;
+
+        $this->patternNames = implode('|', array_keys($this->paramPatterns));
     }
 
     /**
-     * Get current path from application
+     * Get current path from URL (ignores subfolders if it is located in a subfolder on your webserver)
      *
      * @return string
      */
@@ -55,7 +60,7 @@ class Teeny
     }
 
     /**
-     * Get or set HTTP status
+     * Get or set HTTP status code
      *
      * @param int $code
      * @return int
@@ -123,10 +128,23 @@ class Teeny
     }
 
     /**
+     * Add or replace a pattern for custom routes, like `/foo/<variable1:pattern>`
+     *
+     * @param string $pattern
+     * @param string $regex
+     * @return void
+     */
+    public function setPattern($pattern, $regex)
+    {
+        $this->paramPatterns[preg_quote($pattern)] = $regex;
+        $this->patternNames = implode('|', array_keys($this->paramPatterns));
+    }
+
+    /**
      * Handler HTTP status code
      *
-     * @param array    $codes
-     * @param callable $callback
+     * @param array           $codes
+     * @param callable|string $callback Define function or script file
      * @return void
      */
     public function handlerCodes(array $codes, $callback)
@@ -139,7 +157,7 @@ class Teeny
     /**
      * Execute application
      *
-     * @return bool
+     * @return bool Returns false if request matches a file in built-in web server, otherwise returns true
      */
     public function exec()
     {
@@ -176,9 +194,11 @@ class Teeny
 
             if (isset($this->codes[$code])) {
                 $callback = $this->codes[$code];
-                echo $callback($code);
+                $params = array('code' => $code);
             }
-        } elseif (is_string($callback) && strpos($callback, '.') !== false) {
+        }
+
+        if (is_string($callback) && strpos($callback, '.') !== false) {
             teeny_sandbox($this, $callback, $params);
         } else if ($params) {
             echo $callback($params);
@@ -189,23 +209,11 @@ class Teeny
         return true;
     }
 
-    /**
-     * Create or replace a pattern for URL slugs
-     *
-     * @param string $name
-     * @param string $regex
-     * @return void
-     */
-    public function setPattern($name, $regex)
-    {
-        $this->paramPatterns[preg_quote($name)] = $regex;
-    }
-
     private function params(&$routes, &$params)
     {
         $pathinfo = $this->pathInfo;
-        $patterns = $this->paramPatterns;
-        $getParams = '#\\\\[<]([A-Za-z]\\w+)(\\\\:(' . implode('|', array_keys($patterns)) . ')|)\\\\[>]#';
+        $patterns = &$this->paramPatterns;
+        $getParams = '#\\\\[<]([A-Za-z]\\w+)(\\\\:(' . $this->patternNames . ')|)\\\\[>]#';
 
         $limit = 20;
         $total = count($this->paramRoutes);
@@ -222,7 +230,6 @@ class Teeny
             }
 
             $groupRegex = implode(')|(', $slice);
-
             $groupRegex = preg_replace($getParams, '(?P<$1><$3>)', $groupRegex);
             $groupRegex = str_replace('<>)', '[^/]+)', $groupRegex);
 
@@ -236,7 +243,7 @@ class Teeny
                 foreach ($params as $index => $value) {
                     if ($value === '' || is_int($index)) {
                         unset($params[$index]);
-                    } else if (strpos($index, 'route_') === 0) {
+                    } elseif (strpos($index, 'route_') === 0) {
                         $routes = $callbacks[substr($index, 6) - 1];
                         unset($params[$index]);
                     }
@@ -250,11 +257,13 @@ class Teeny
     private function fileInBuiltIn()
     {
         $path = $this->pathInfo;
+        $public = $_SERVER['DOCUMENT_ROOT'];
+
         return (
             $path !== '/' &&
             strpos($path, '.') !== 0 &&
             strpos($path, '/.') === false &&
-            is_file('public' . $path)
+            is_file($public . '/' . $path)
         );
     }
 }
@@ -262,12 +271,13 @@ class Teeny
 /**
  * Require file
  *
- * @param Teeny  $app      Teeny (or custom) context
- * @param string $callback File required
- * @param array  $params   Params from route pattern
+ * @param \Inphinit\Teeny $app      Teeny (or custom) context
+ * @param string          $callback File required
+ * @param array           $params   Params from route pattern
  * @return mixed
  */
 function teeny_sandbox(Teeny $app, $callback, $params)
 {
     return require $callback;
 }
+
