@@ -4,7 +4,7 @@
     "keywords": [ "routing", "url" ],
     "license": "MIT",
     "type": "project",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
         "vendor-dir": "vendor"

@@ -1,3 +1,9 @@
-.phpintel
-composer.lock
+~*
+/.fleet
+/.idea
+/.nova
+/.phpintel
+/.phpunit.cache
+/.vscode
+/.zed
 php_errors.log

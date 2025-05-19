@@ -2,7 +2,7 @@
 /**
  * Teeny
  *
- * Copyright (c) 2024 Guilherme Nascimento (brcontainer@yahoo.com.br)
+ * Copyright (c) 2025 Guilherme Nascimento (brcontainer@yahoo.com.br)
  *
  * Released under the MIT license
  */
@@ -38,15 +38,14 @@ class Teeny
 
         $this->builtIn = PHP_SAPI === 'cli-server';
 
-        $uri = rawurldecode(strtok($_SERVER['REQUEST_URI'], '?'));
+        $path = rawurldecode(strtok($_SERVER['REQUEST_URI'], '?'));
 
         if ($this->builtIn === false) {
-            $uri = substr($uri, strpos($_SERVER['SCRIPT_NAME'], '/index.php'));
+            $pos = strpos($_SERVER['SCRIPT_NAME'], '/index.php');
+            $path = substr($path, $pos);
         }
 
-        $this->pathInfo = $uri;
-
-        $this->patternNames = implode('|', array_keys($this->paramPatterns));
+        $this->pathInfo = $path;
     }
 
     /**
@@ -99,7 +98,7 @@ class Teeny
      *
      * @param string|array    $methods
      * @param string          $path
-     * @param string|\Closure $callback
+     * @param string|callable $callback
      * @return void
      */
     public function action($methods, $path, $callback)
@@ -128,16 +127,16 @@ class Teeny
     }
 
     /**
-     * Add or replace a pattern for custom routes, like `/foo/<variable1:pattern>`
+     * Create or replace a pattern for URL slugs
      *
-     * @param string $pattern
+     * @param string $name
      * @param string $regex
      * @return void
      */
-    public function setPattern($pattern, $regex)
+    public function setPattern($name, $regex)
     {
-        $this->paramPatterns[preg_quote($pattern)] = $regex;
-        $this->patternNames = implode('|', array_keys($this->paramPatterns));
+        $this->paramPatterns[preg_quote($name)] = $regex;
+        $this->patternNames = null;
     }
 
     /**
@@ -211,6 +210,10 @@ class Teeny
 
     private function params(&$routes, &$params)
     {
+        if ($this->patternNames === null) {
+            $this->patternNames = implode('|', array_keys($this->paramPatterns));
+        }
+
         $pathinfo = $this->pathInfo;
         $patterns = &$this->paramPatterns;
         $getParams = '#\\\\[<]([A-Za-z]\\w+)(\\\\:(' . $this->patternNames . ')|)\\\\[>]#';
@@ -280,4 +283,3 @@ function teeny_sandbox(Teeny $app, $callback, $params)
 {
     return require $callback;
 }
-
